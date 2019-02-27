@@ -33,7 +33,8 @@ function arm_menu {
 
 function x64_menu {
   echo "Select distribution to start a new container:";
-  options=( "Ubuntu 18.04" "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Debian 9" "Debian 8" "Debian 7" "CentOS 7" "CentOS 6.10" "CentOS 6.5" "RHEL 7" "RHEL 6.5" "Quit" );
+  options=( "Ubuntu 18.04" "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Debian 9" "Debian 8" "Debian 7" \
+            "CentOS 7" "CentOS 6.10" "CentOS 6.5" "RHEL 7" "RHEL 6.5" "Amazon Linux 2" "Amazon Linux AMI" "Quit" );
 
   select opt in "${options[@]}"; do
     case $REPLY in
@@ -49,7 +50,9 @@ function x64_menu {
       10) docker_run "centos:6.5";;
       11) docker_run "richxsl/rhel7";;
       12) docker_run "richxsl/rhel6.5";;
-      13) break;;
+      13) docker_run "amazonlinux:2";;
+      14) docker_run "amazonlinux:1";;
+      15) break;;
     esac
   done
 }

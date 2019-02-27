@@ -22,6 +22,9 @@ function main {
     echo_pull "RHEL";
     pull_rhel;
 
+    echo_pull "Amazon Linux";
+    pull_amazon_linux;
+
   else
     echo;
     echo "Unsupported CPU architecture";
@@ -39,33 +42,38 @@ function echo_pull {
 }
 
 function pull_ubuntu {
-  ubuntu_images=( "ubuntu:18.04" "ubuntu:16.04" "ubuntu:14.04" "ubuntu:12.04" );
-  docker_pull ${ubuntu_images[@]};
+  images=( "ubuntu:18.04" "ubuntu:16.04" "ubuntu:14.04" "ubuntu:12.04" );
+  docker_pull ${images[@]};
 }
 
 function pull_debian {
-  debian_images=( "debian:9" "debian:8" "debian:7" );
-  docker_pull ${debian_images[@]};
+  images=( "debian:9" "debian:8" "debian:7" );
+  docker_pull ${images[@]};
 }
 
 function pull_centos {
-  centos_images=( "centos:7" "centos:6.10" "centos:6.5" );
-  docker_pull ${centos_images[@]};
+  images=( "centos:7" "centos:6.10" "centos:6.5" );
+  docker_pull ${images[@]};
 }
 
 function pull_rhel {
-  rhel_images=( "richxsl/rhel7" "richxsl/rhel6.5" );
-  docker_pull ${rhel_images[@]};
+  images=( "richxsl/rhel7" "richxsl/rhel6.5" );
+  docker_pull ${images[@]};
+}
+
+function pull_amazon_linux {
+  images=( "amazonlinux:2" "amazonlinux:1" );
+  docker_pull ${images[@]};
 }
 
 function pull_raspbian {
-  raspbian_images=( "raspbian/stretch" "raspbian/jessie" );
-  docker_pull ${raspbian_images[@]};
+  images=( "raspbian/stretch" "raspbian/jessie" );
+  docker_pull ${images[@]};
 }
 
 function docker_pull {
-  for i in "${@}"; do
-    docker pull ${i};
+  for image in "${@}"; do
+    docker pull ${image};
   done
 }
 
