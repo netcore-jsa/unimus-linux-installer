@@ -52,7 +52,7 @@ function pull_debian {
 }
 
 function pull_centos {
-  images=( "centos:7" "centos:6.10" "centos:6.5" );
+  images=( "centos:7" "centos:6.10" "centos:6.6" );
   docker_pull ${images[@]};
 }
 
