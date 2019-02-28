@@ -18,8 +18,8 @@ options=( "test" "prod" "Quit" );
 
 select opt in "${options[@]}"; do
   case $REPLY in
-    1) import_command="./%s";;
-    2) import_command="bash <(curl -sS 'https://unimus.net/download/linux-v2/%s')";;
+    1) run_command="./%s";;
+    2) run_command="bash <(curl -sS 'https://unimus.net/download/linux-v2/%s')";;
     3) break;;
   esac
 done
@@ -27,4 +27,4 @@ done
 cp -r src/* target;
 cd target;
 
-find . -type f -exec sed -i -r "s#<import-replace\|(.+?)\|import-replace>#$(printf "${import_command}" "\1")#" {} +;
+find . -type f -exec sed -i -r "s#<run-replace\|(.+?)\|run-replace>#$(printf "${run_command}" "\1")#" {} +;
