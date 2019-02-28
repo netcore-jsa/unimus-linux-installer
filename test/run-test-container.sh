@@ -3,6 +3,9 @@
 # Version: 2019-02-27-01
 
 function main {
+  # set workdir to the script dir
+  cd "$(dirname "$0")"
+
   lscpu=$(lscpu);
 
   if [[ $lscpu == *ARM* ]]; then
@@ -58,7 +61,7 @@ function x64_menu {
 }
 
 function docker_run {
-  docker run -it $1 /bin/bash;
+  docker run -it -v "$(dirname $(pwd))/target:/root/unimus-installer:ro" $1 /bin/bash;
 }
 
 # script entry point

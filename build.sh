@@ -26,7 +26,7 @@ if [ ! -d "target" ]; then
 fi
 
 # target cleanup
-rm -r target/*;
+rm -r target/* &> /dev/null;
 
 # copy scripts from src to target
 cp -r src/* target;
