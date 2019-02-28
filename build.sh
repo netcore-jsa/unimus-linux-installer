@@ -20,11 +20,17 @@ select opt in "${options[@]}"; do
   case $REPLY in
     1) run_command="./%s";;
     2) run_command="bash <(curl -sS 'https://unimus.net/download/linux-v2/%s')";;
-    3) break;;
+    3) exit;;
   esac
+
+  profile=$opt;
 done
 
 cp -r src/* target;
 cd target;
 
 find . -type f -exec sed -i -r "s#<run-replace\|(.+?)\|run-replace>#$(printf "${run_command}" "\1")#" {} +;
+
+if [[ $profile == 'test' ]]; then
+  chmod -R +x .;
+fi
