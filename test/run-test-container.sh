@@ -33,25 +33,25 @@ function arm_menu {
 
 function x64_menu {
   echo "Select distribution to start a new container:";
-  options=( "Ubuntu 18.04" "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Debian 9" "Debian 8" "Debian 7" \
-            "CentOS 7" "CentOS 6.10" "CentOS 6.6" "RHEL 7" "RHEL 6.5" "Amazon Linux 2" "Amazon Linux AMI" "Quit" );
+  options=( "Amazon Linux 2" "Amazon Linux AMI" "CentOS 7" "CentOS 6.10" "CentOS 6.6" "Debian 9" "Debian 8" "Debian 7" \
+            "RHEL 7" "RHEL 6.5" "Ubuntu 18.04" "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
 
   select opt in "${options[@]}"; do
     case $REPLY in
-      1) docker_run "ubuntu:18.04";;
-      2) docker_run "ubuntu:16.04";;
-      3) docker_run "ubuntu:14.04";;
-      4) docker_run "ubuntu:12.04";;
-      5) docker_run "debian:9";;
-      6) docker_run "debian:8";;
-      7) docker_run "debian:7";;
-      8) docker_run "centos:7";;
-      9) docker_run "centos:6.10";;
-      10) docker_run "centos:6.6";;
-      11) docker_run "richxsl/rhel7";;
-      12) docker_run "richxsl/rhel6.5";;
-      13) docker_run "amazonlinux:2";;
-      14) docker_run "amazonlinux:1";;
+      1) docker_run "amazonlinux:2";;
+      2) docker_run "amazonlinux:1";;
+      3) docker_run "centos:7";;
+      4) docker_run "centos:6.10";;
+      5) docker_run "centos:6.6";;
+      6) docker_run "debian:9";;
+      7) docker_run "debian:8";;
+      8) docker_run "debian:7";;
+      9) docker_run "richxsl/rhel7";;
+      10) docker_run "richxsl/rhel6.5";;
+      11) docker_run "ubuntu:18.04";;
+      12) docker_run "ubuntu:16.04";;
+      13) docker_run "ubuntu:14.04";;
+      14) docker_run "ubuntu:12.04";;
       15) break;;
     esac
   done

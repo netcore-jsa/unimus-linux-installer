@@ -10,20 +10,20 @@ function main {
     pull_raspbian;
 
   elif [[ $lscpu == *x86_64* ]]; then
-    echo_pull "Ubuntu";
-    pull_ubuntu;
-
-    echo_pull "Debian";
-    pull_debian;
+    echo_pull "Amazon Linux";
+    pull_amazon_linux;
 
     echo_pull "CentOS";
     pull_centos;
 
+    echo_pull "Debian";
+    pull_debian;
+
     echo_pull "RHEL";
     pull_rhel;
 
-    echo_pull "Amazon Linux";
-    pull_amazon_linux;
+    echo_pull "Ubuntu";
+    pull_ubuntu;
 
   else
     echo;
@@ -41,23 +41,8 @@ function echo_pull {
   echo;
 }
 
-function pull_ubuntu {
-  images=( "ubuntu:18.04" "ubuntu:16.04" "ubuntu:14.04" "ubuntu:12.04" );
-  docker_pull ${images[@]};
-}
-
-function pull_debian {
-  images=( "debian:9" "debian:8" "debian:7" );
-  docker_pull ${images[@]};
-}
-
-function pull_centos {
-  images=( "centos:7" "centos:6.10" "centos:6.6" );
-  docker_pull ${images[@]};
-}
-
-function pull_rhel {
-  images=( "richxsl/rhel7" "richxsl/rhel6.5" );
+function pull_raspbian {
+  images=( "raspbian/stretch" "raspbian/jessie" );
   docker_pull ${images[@]};
 }
 
@@ -66,8 +51,23 @@ function pull_amazon_linux {
   docker_pull ${images[@]};
 }
 
-function pull_raspbian {
-  images=( "raspbian/stretch" "raspbian/jessie" );
+function pull_centos {
+  images=( "centos:7" "centos:6.10" "centos:6.6" );
+  docker_pull ${images[@]};
+}
+
+function pull_debian {
+  images=( "debian:9" "debian:8" "debian:7" );
+  docker_pull ${images[@]};
+}
+
+function pull_rhel {
+  images=( "richxsl/rhel7" "richxsl/rhel6.5" );
+  docker_pull ${images[@]};
+}
+
+function pull_ubuntu {
+  images=( "ubuntu:18.04" "ubuntu:16.04" "ubuntu:14.04" "ubuntu:12.04" );
   docker_pull ${images[@]};
 }
 
