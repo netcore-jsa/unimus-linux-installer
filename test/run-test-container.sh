@@ -26,7 +26,7 @@ function arm_menu {
     case $REPLY in
       1) docker_run "raspbian/stretch";;
       2) docker_run "raspbian/jessie";;
-      3) break;;
+      3) exit;;
     esac
   done
 }
@@ -52,7 +52,7 @@ function x64_menu {
       12) docker_run "ubuntu:16.04";;
       13) docker_run "ubuntu:14.04";;
       14) docker_run "ubuntu:12.04";;
-      15) break;;
+      15) exit;;
     esac
   done
 }
