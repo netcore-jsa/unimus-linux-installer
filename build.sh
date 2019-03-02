@@ -25,11 +25,11 @@ fi;
 
 case $selected_profile in
   test)
-    run_command="./%s";
+    source_command="source ./%s";
     get_command="cp ./%s %s";
     ;;
   prod)
-    run_command="bash <(curl -sS 'https://unimus.net/download/linux-v2/%s')";
+    source_command="source <(curl -sS 'https://unimus.net/download/linux-v2/%s')";
     get_command="curl https://unimus.net/download/linux-v2/%s -o %s 2>&1')";
     ;;
   Quit)
@@ -52,7 +52,7 @@ cp -r src/* target;
 cd target;
 
 # replace script parts as per profile
-find . -type f -exec sed -i -r "s#<run-replace\|(.+?)\|run-replace>#$(printf "${run_command}" "\1")#" {} +;
+find . -type f -exec sed -i -r "s#<source-replace\|(.+?)\|source-replace>#$(printf "${source_command}" "\1")#" {} +;
 find . -type f -exec sed -i -r "s#<get-replace\|(.+?)\|(.+?)\|get-replace>#$(printf "${get_command}" "\1" "\2")#" {} +;
 
 # if running in test profile, make scripts executable

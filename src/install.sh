@@ -8,29 +8,41 @@ function main {
 
   echo;
 
+  # check if installer running as 'root'
   check_root;
-  get_parameters;
+
+  # import generic cross-OS parameters
+  <source-replace|params/generic.sh|source-replace>;
+  # get per-OS parameters
+  get_os_parameters;
+
+  # output installer info
   installer_info;
 
+  # install Java and dependencies
   check_java;
   install_java;
   install_dependencies;
 
+  # before we deal with services, we need to know the init system
   check_if_systemd;
 
+  # stop Unimus before upgrade / install
   stop_unimus_service;
   remove_unimus_autostart;
 
+  # get Unimus
   download_unimus;
   download_unimus_support_files;
 
+  # start Unimus after upgrade / install
   add_unimus_autostart;
   start_unimus_service;
 }
 
 function check_root {
   # check if root
-  user=$(whoami);
+  local user=$(whoami);
   if [[ $user != "root" ]]; then
       echo 'This installer requires root privileges.';
       echo 'Please switch to root and run the installer again.';
@@ -39,27 +51,24 @@ function check_root {
   fi;
 }
 
-function get_parameters {
-  # import generic cross-OS parameters
-  <run-replace|params/generic.sh|run-replace>;
-
+function get_os_parameters {
   # get OS release file
-  release=$(cat /etc/*release);
+  local release=$(cat /etc/*release);
 
   # import OS-specific parameters
   case $release in
     *"Amazon Linux"*)
-      <run-replace|params/aws-centos-rhel.sh|run-replace>;;
+      <source-replace|params/aws-centos-rhel.sh|source-replace>;;
     *"CentOS"*)
-      <run-replace|params/aws-centos-rhel.sh|run-replace>;;
+      <source-replace|params/aws-centos-rhel.sh|source-replace>;;
     *"Debian"*)
-      <run-replace|params/debian-raspbian-ubuntu.sh|run-replace>;;
+      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;;
     *"Raspbian"*)
-      <run-replace|params/debian-raspbian-ubuntu.sh|run-replace>;;
+      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;;
     *"Red Hat Enterprise Linux"*)
-      <run-replace|params/aws-centos-rhel.sh|run-replace>;;
+      <source-replace|params/aws-centos-rhel.sh|source-replace>;;
     *"Ubuntu"*)
-      <run-replace|params/debian-raspbian-ubuntu.sh|run-replace>;;
+      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;;
 
     *)
       echo "We are sorry, but the installer currently doesn't support your OS.";
@@ -115,10 +124,9 @@ function install_java {
     echo;
   fi;
 
-  java_package_to_install='';
+  local java_package_to_install='';
 
-  echo 'Updating list of available packages.';
-  echo 'This might take a while...';
+  echo 'Updating list of available packages, this might take a while...';
   echo;
   $(package_list_update_command) &> /dev/null;
 
@@ -127,7 +135,7 @@ function install_java {
     $(package_check_available_command) $i;
 
     if [[ $? == 0 ]]; then
-      java_package_to_install=$i;
+      local java_package_to_install=$i;
       break;
     fi;
   done;
