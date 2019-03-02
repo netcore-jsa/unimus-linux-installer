@@ -76,7 +76,7 @@ function get_os_parameters {
       echo;
       exit 1;
       ;;
-  esac
+  esac;
 }
 
 function installer_info {
@@ -104,7 +104,7 @@ function installer_info {
 function check_java {
   echo 'Checking if supported Java installed...'
   if type java &> /dev/null; then
-    if $(java_version_check_command) |& grep -P "${supported_java_regex}" &> /dev/null; then
+    if ${java_version_check_command} |& grep -P "${supported_java_regex}" &> /dev/null; then
       echo 'Supported Java version found, continuing...'
       supported_java_found=1;
       return;
@@ -128,11 +128,11 @@ function install_java {
 
   echo 'Updating list of available packages, this might take a while...';
   echo;
-  $(package_list_update_command) &> /dev/null;
+  ${package_list_update_command} &> /dev/null;
 
   # check if any of supported packages installable
   for i in "${java_package_install_list[@]}"; do
-    $(package_check_available_command) $i;
+    ${package_check_available_command} $i;
 
     if [[ $? == 0 ]]; then
       local java_package_to_install=$i;
@@ -158,7 +158,7 @@ function install_java {
 
 function install_dependencies {
   for i in "${dependency_packages[@]}"; do
-    if ! $(package_check_installed_command) $i &> /dev/null; then
+    if ! ${package_check_installed_command} $i &> /dev/null; then
       # FIXME
       echo "Should install ${i}";
     fi;
