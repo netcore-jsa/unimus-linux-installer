@@ -25,17 +25,21 @@ function echo_no_java_supported_packages {
   echo;
 }
 
-# package manager commands (should be overridden by per-OS params)
-declare package_list_update_command;
-declare package_check_available_command;
-declare package_check_installed_command;
-declare package_install_command;
+#----------------------------------------------------------------#
+# anything below this line should be overridden by per-OS params #
+#----------------------------------------------------------------#
 
-# supported Java packages (should be overridden by per-OS params)
-declare java_package_install_list;
+# package manager commands
+package_list_update_command='';
+package_check_available_command='';
+package_check_installed_command='';
+package_install_command='';
+
+# supported Java packages
+java_package_install_list='';
 
 function add_java_package_repo {
-  echo 'This function should be overriden by OS-specific params';
+  echo 'This function should be overridden by OS-specific params';
   echo 'If you are seeing this, something is wrong...';
   echo;
   exit 1;

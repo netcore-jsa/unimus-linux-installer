@@ -25,7 +25,7 @@ fi;
 
 case $selected_profile in
   test)
-    source_command="source ./%s";
+    source_command="source <(cat ./%s)";
     get_command="cp ./%s %s";
     ;;
   prod)
