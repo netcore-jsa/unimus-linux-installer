@@ -23,7 +23,7 @@ function main {
 
 function arm_menu {
   echo "Select distribution to start a new container:";
-  options=( "Raspbian Stretch" "Raspbian Jessie" "Quit" );
+  options=( "Raspbian Stretch (9)" "Raspbian Jessie (8)" "Quit" );
 
   select opt in "${options[@]}"; do
     case $REPLY in
@@ -36,8 +36,9 @@ function arm_menu {
 
 function x64_menu {
   echo "Select distribution to start a new container:";
-  options=( "Amazon Linux 2" "Amazon Linux AMI" "CentOS 7" "CentOS 6.10" "CentOS 6.6" "Debian 9" "Debian 8" "Debian 7" \
-            "RHEL 7" "RHEL 6.5" "Ubuntu 18.04" "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
+  options=( "Amazon Linux 2" "Amazon Linux AMI" "CentOS 7" "CentOS 6.10" "CentOS 6.6" "Debian 9 (Stretch)" \
+            "Debian 8 (Jessie)" "Debian 7 (Wheeze)" "RHEL 7" "RHEL 6.5" "Ubuntu 18.04" "Ubuntu 16.04" \
+            "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
 
   select opt in "${options[@]}"; do
     case $REPLY in
