@@ -215,22 +215,18 @@ function stop_unimus_service {
   else
     if service unimus status &> /dev/null; then
       echo 'The running Unimus service will now be stopped.';
-      serviceunimus stop &> /dev/null;
+      service unimus stop &> /dev/null;
     fi;
   fi;
 }
 
 function remove_unimus_autostart {
   if [[ $is_systemd == 1 ]]; then
-    if systemctl status unimus &> /dev/null; then
-      echo 'Unimus service will now be removed from auto-start.';
-      systemctl disable unimus &> /dev/null;
-    fi;
+    echo 'Unimus service will now be removed from auto-start.';
+    systemctl disable unimus &> /dev/null;
   else
-    if service unimus status &> /dev/null; then
-      echo 'Unimus service will now be removed from auto-start.';
-      $(printf "${service_autostart_remove_command}" "unimus") &> /dev/null;
-    fi;
+    echo 'Unimus service will now be removed from auto-start.';
+    $(printf "${service_autostart_remove_command}" "unimus") &> /dev/null;
   fi;
 }
 
