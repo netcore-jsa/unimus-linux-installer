@@ -146,11 +146,6 @@ function install_java {
     fi;
   done;
 
-  if [[ $java_install_counter > 1 ]]; then
-    echo_no_java_supported_packages;
-    exit 1;
-  fi;
-
   if [[ $java_package_to_install != '' ]]; then
     echo "Installing Java - '${java_package_to_install}'";
     echo 'This can take a considerable amount of time...';
@@ -168,12 +163,18 @@ function install_java {
       exit 1;
     fi;
   else
-    # add OpenJDK APT repo
-    add_java_package_repo;
-    ((java_install_counter++));
+    if [[ $java_install_counter == 0 ]]; then
+      # add OpenJDK APT repo
+      add_java_package_repo;
+      ((java_install_counter++));
 
-    # call this function again to install Java from the new repo
-    install_java;
+      # call this function again to install Java from the new repo
+      install_java;
+    else
+      # if this is the 2nd time we got here, packages are not even in OpenJDK APT repo
+      echo_no_java_supported_packages;
+      exit 1;
+    fi;
   fi;
 }
 

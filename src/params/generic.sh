@@ -15,7 +15,7 @@ java_install_counter=0;
 is_systemd=0;
 
 # other package dependencies
-dependency_packages=( 'curl' 'haveged' 'ps' );
+dependency_packages=( 'curl' 'haveged' 'procps' );
 
 # echo supported Java not available message
 function echo_no_java_supported_packages {
