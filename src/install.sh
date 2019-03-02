@@ -153,7 +153,7 @@ function install_java {
     echo 'This can take a considerable amount of time...';
     echo;
 
-    local java_install_command=$(printf "${package_install_command}" "${1}");
+    local java_install_command=$(printf "${package_install_command}" "${java_package_to_install}");
 
     ${java_install_command} 2>&1;
 
