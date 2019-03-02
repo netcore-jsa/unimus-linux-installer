@@ -31,7 +31,7 @@ function add_ubuntu_openjdk_ppa {
   echo_java_repo_confirmation 'OpenJDK';
 
   # make sure we have 'add-apt-repository'
-  $(printf "${package_install_command}" 'add-apt-repository') &> /dev/null;
+  $(printf "${package_install_command}" 'software-properties-common') &> /dev/null;
 
   # add OpenJDK repo
   add-apt-repository ppa:openjdk-r/ppa;
