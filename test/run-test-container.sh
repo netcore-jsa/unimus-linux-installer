@@ -4,7 +4,7 @@
 
 function main {
   # set workdir to the script dir
-  cd "$(dirname "$0")"
+  cd "$(dirname "$0")";
 
   lscpu=$(lscpu);
 
@@ -65,4 +65,4 @@ function docker_run {
 }
 
 # script entry point
-main
+main;

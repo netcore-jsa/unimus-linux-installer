@@ -3,7 +3,7 @@
 # Version: 2019-02-28-01
 
 # set workdir to the script dir
-cd "$(dirname "$0")"
+cd "$(dirname "$0")";
 
 echo "Select build profile:";
 options=( "test" "prod" "Quit" );

@@ -78,4 +78,4 @@ function docker_pull {
 }
 
 # script entry point
-main
+main;
