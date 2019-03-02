@@ -127,15 +127,16 @@ function install_java {
   local java_package_to_install='';
 
   echo 'Updating list of available packages, this might take a while...';
+  echo "(running '${package_list_update_command}' to refresh package indexes)";
   echo;
   ${package_list_update_command} &> /dev/null;
 
   # check if any of supported packages installable
   for i in "${java_package_install_list[@]}"; do
-    ${package_check_available_command} $i;
+    ${package_check_available_command} $i &> /dev/null;
 
     if [[ $? == 0 ]]; then
-      local java_package_to_install=$i;
+      java_package_to_install=$i;
       break;
     fi;
   done;
