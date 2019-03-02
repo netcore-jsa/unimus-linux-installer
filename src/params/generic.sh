@@ -47,7 +47,7 @@ service_autostart_remove_command='';
 
 function add_java_package_repo {
   echo 'This function should be overridden by OS-specific params';
-  echo 'If you are seeing this, something is wrong...';
+  echo 'If you are seeing this, something is wrong... please let us know about this.';
   echo;
   exit 1;
 }
