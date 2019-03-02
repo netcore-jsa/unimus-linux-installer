@@ -53,10 +53,10 @@ function check_root {
 
 function get_os_parameters {
   # get OS release file
-  local release=$(cat /etc/*release);
+  os_release=$(cat /etc/*release);
 
   # import OS-specific parameters
-  case $release in
+  case $os_release in
     *"Amazon Linux"*)
       <source-replace|params/aws-centos-rhel.sh|source-replace>;;
     *"CentOS"*)
@@ -165,10 +165,12 @@ function install_java {
       exit 1;
     fi;
   else
-    # FIXME
-    # increase $java_install_counter
-    # call install_java again
-    echo 'Should add Java package repo here';
+    # add OpenJDK APT repo
+    add_java_package_repo;
+    ((java_install_counter++));
+
+    # call this function again to install Java from the new repo
+    install_java;
   fi;
 }
 
@@ -177,11 +179,13 @@ function install_dependencies {
     if ! ${package_check_installed_command} $i &> /dev/null; then
       echo "Installing dependency package '${i}'";
 
-      $(printf "${package_install_command}" "${i}") &> /dev/null;
+      local dependency_install_command=$(printf "${package_install_command}" "${i}");
+      ${dependency_install_command} &> /dev/null;
 
       if [[ $? != 0 ]]; then
         echo "WARNING: installing package '${i}' failed!";
         echo 'Please install this package manually.';
+        echo "(command: '${dependency_install_command}')";
         echo;
       fi;
     fi;

@@ -2,6 +2,9 @@
 
 # Version: 2019-02-28-01
 
+# OS release (will be populated during run-time)
+os_release='';
+
 # Java version check and installation
 java_version_check_command="java -version";
 supported_java_regex='(?:1\.8\.0_(?:[5-9]\d|[1-9]\d\d+)|1\.8\.[1-9]\d*|1\.9|1\.\d\d+|\d{2,}\.\d+\.\d+)';
