@@ -99,6 +99,8 @@ function installer_info {
 
   read -s;
   echo;
+  echo '-----------------------------------------------------------------';
+  echo;
 }
 
 function check_java {
@@ -147,8 +149,21 @@ function install_java {
   fi;
 
   if [[ $java_package_to_install != '' ]]; then
-    # FIXME
-    echo 'Should install Java here';
+    echo "Installing Java - '${java_package_to_install}'";
+    echo 'This can take a considerable amount of time...';
+    echo;
+
+    local java_install_command=$(printf "${package_install_command}" "${1}");
+
+    ${java_install_command} 2>&1;
+
+    if [[ $? != 0 ]]; then
+      echo;
+      echo "ERROR: installing Java failed!";
+      echo "Please try running '${java_install_command}' manually."
+      echo;
+      exit 1;
+    fi;
   else
     # FIXME
     # increase $java_install_counter
@@ -160,8 +175,15 @@ function install_java {
 function install_dependencies {
   for i in "${dependency_packages[@]}"; do
     if ! ${package_check_installed_command} $i &> /dev/null; then
-      # FIXME
-      echo "Should install ${i}";
+      echo "Installing dependency package '${i}'";
+
+      $(printf "${package_install_command}" "${1}") &> /dev/null;
+
+      if [[ $? != 0 ]]; then
+        echo "WARNING: installing package '${1}' failed!";
+        echo 'Please install this package manually.';
+        echo;
+      fi;
     fi;
   done;
 
