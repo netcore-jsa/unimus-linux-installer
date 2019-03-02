@@ -5,20 +5,32 @@
 # set workdir to the script dir
 cd "$(dirname "$0")";
 
-echo "Select build profile:";
-options=( "test" "prod" "Quit" );
+supported_options=( 'test' 'prod' 'Quit' );
+selected_profile='';
 
-select opt in "${options[@]}"; do
-  case $REPLY in
-    1) run_command="./%s";
-       profile=$opt;
-       break;;
-    2) run_command="bash <(curl -sS 'https://unimus.net/download/linux-v2/%s')";
-       profile=$opt;
-       break;;
-    3) exit;;
-  esac
-done
+if [[ " ${supported_options[@]} " =~ " ${1} " ]]; then
+  selected_profile=$1;
+else
+  echo "Select build profile:";
+  select opt in "${supported_options[@]}"; do
+    case $REPLY in
+      1|2)
+        selected_profile=$opt;
+        break;;
+      3)
+        exit;;
+    esac;
+  done;
+fi;
+
+case $selected_profile in
+  test)
+    run_command="./%s";;
+  prod)
+    run_command="bash <(curl -sS 'https://unimus.net/download/linux-v2/%s')";;
+  Quit)
+    exit;;
+esac;
 
 # make target directory if missing
 if [ ! -d "target" ]; then
@@ -28,6 +40,9 @@ fi
 # target cleanup
 rm -r target/* &> /dev/null;
 
+echo;
+echo "Building in '${selected_profile}' profile...";
+
 # copy scripts from src to target
 cp -r src/* target;
 cd target;
@@ -36,10 +51,9 @@ cd target;
 find . -type f -exec sed -i -r "s#<run-replace\|(.+?)\|run-replace>#$(printf "${run_command}" "\1")#" {} +;
 
 # if running in test profile, make scripts executable
-if [[ $profile == 'test' ]]; then
+if [[ $selected_profile == 'test' ]]; then
   chmod -R +x .;
 fi
 
-echo;
 echo "Build done, check target";
 echo;
