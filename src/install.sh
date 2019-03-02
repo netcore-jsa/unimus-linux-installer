@@ -177,10 +177,10 @@ function install_dependencies {
     if ! ${package_check_installed_command} $i &> /dev/null; then
       echo "Installing dependency package '${i}'";
 
-      $(printf "${package_install_command}" "${1}") &> /dev/null;
+      $(printf "${package_install_command}" "${i}") &> /dev/null;
 
       if [[ $? != 0 ]]; then
-        echo "WARNING: installing package '${1}' failed!";
+        echo "WARNING: installing package '${i}' failed!";
         echo 'Please install this package manually.';
         echo;
       fi;
@@ -221,9 +221,7 @@ function remove_unimus_autostart {
   else
     if service unimus status &> /dev/null; then
       echo 'Unimus service will now be removed from auto-start.';
-      # FIXME should do proper command per-OS
-      chkconfig unimus off &> /dev/null;
-      update-rc.d -f unimus remove &> /dev/null;
+      $(printf "${service_autostart_remove_command}" "unimus") &> /dev/null;
     fi;
   fi;
 }
@@ -261,9 +259,7 @@ function add_unimus_autostart {
   if [[ $is_systemd == 1 ]]; then
     systemctl enable unimus &> /dev/null;
   else
-    # FIXME should do proper command per-OS
-    chkconfig unimus on &> /dev/null;
-    update-rc.d unimus defaults &> /dev/null;
+    $(printf "${service_autostart_add_command}" "unimus") &> /dev/null;
   fi;
 }
 

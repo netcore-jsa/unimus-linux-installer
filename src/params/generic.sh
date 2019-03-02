@@ -38,6 +38,10 @@ package_install_command='';
 # supported Java packages
 java_package_install_list='';
 
+# service management
+service_autostart_add_command='';
+service_autostart_remove_command='';
+
 function add_java_package_repo {
   echo 'This function should be overridden by OS-specific params';
   echo 'If you are seeing this, something is wrong...';

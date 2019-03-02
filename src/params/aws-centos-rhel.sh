@@ -11,6 +11,10 @@ package_install_command='yum install %s -y';
 # supported Java packages
 java_package_install_list=( 'java-11-openjdk' 'java-1.8.0-openjdk' );
 
+# service management
+service_autostart_add_command='chkconfig %s on';
+service_autostart_remove_command='chkconfig %s off';
+
 function add_java_package_repo {
   echo_no_java_supported_packages;
   exit 1;
