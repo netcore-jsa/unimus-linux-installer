@@ -29,22 +29,26 @@ function add_java_package_repo {
       # add OpenJDK repo
       add-apt-repository ppa:openjdk-r/ppa;
       ;;
-    *)
+    *"Debian"*)
       # find the Ubuntu equivalent to this Debian
-      if [[ $os_release ~= 'jessie' ]]; then
-        ubuntu_equivalent='trusty';
-      elif [[ $os_release ~= 'wheezy' ]]; then
-        ubuntu_equivalent='precise';
-      else
-        echo_no_java_supported_packages;
-        exit 1;
-      fi;
+      case $os_release in
+        *"jessie"*)
+          ubuntu_equivalent='trusty';;
+        *"wheezy"*)
+          ubuntu_equivalent='precise';;
+        *)
+          echo_no_java_supported_packages;
+          exit 1;;
+      esac;
 
       # add the OpenJDK PPA
       cat "deb http://ppa.launchpad.net/openjdk-r/ppa/ubuntu ${ubuntu_equivalent} main" > /etc/apt/sources.list.d/openjdk-r.list;
       cat "deb-src http://ppa.launchpad.net/openjdk-r/ppa/ubuntu ${ubuntu_equivalent} main " >> /etc/apt/sources.list.d/openjdk-r.list;
       apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DA1A4A13543B466853BAF164EB9B1D8886F44E2A  &> /dev/null;
       ;;
+    *)
+      echo_no_java_supported_packages;
+      exit 1;;
   esac;
 
   echo;
