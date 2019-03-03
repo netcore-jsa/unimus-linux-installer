@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Version: 2019-03-02-01
+# Version: 2019-03-03-01
 
 function main {
   # set workdir to the script dir
@@ -141,8 +141,11 @@ function install_java {
     ${package_check_available_command} $i &> /dev/null;
 
     if [[ $? == 0 ]]; then
-      java_package_to_install=$i;
-      break;
+      # check if package version matches requirements
+      if $(printf "${package_show_latest_version_command}" "${i}") |& grep -P "${supported_java_regex}" &> /dev/null; then
+        java_package_to_install=$i;
+        break;
+      fi;
     fi;
   done;
 

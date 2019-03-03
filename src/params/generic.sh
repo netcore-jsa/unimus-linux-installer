@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Version: 2019-02-28-01
+# Version: 2019-03-03-01
 
 # OS release (will be populated during run-time)
 os_release='';
 
 # Java version check and installation
 java_version_check_command="java -version";
-supported_java_regex='(?:1\.8\.0_(?:[5-9]\d|[1-9]\d\d+)|1\.8\.[1-9]\d*|1\.9|1\.\d\d+|\d{2,}\.\d+\.\d+)';
+supported_java_regex='(?:^| )(?:1\.8\.0[_\.](?:[5-9]\d|[1-9]\d\d+)|1\.8\.[1-9]\d*|1\.9|1\.\d\d+|\d{2,}\.\d+\.\d+)';
 supported_java_found=0;
 java_install_counter=0;
 
@@ -37,6 +37,7 @@ package_list_update_command='';
 package_check_available_command='';
 package_check_installed_command='';
 package_install_command='';
+package_show_latest_version_command='';
 
 # supported Java packages
 java_package_install_list='';

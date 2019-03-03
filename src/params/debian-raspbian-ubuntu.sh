@@ -1,12 +1,13 @@
 #!/bin/bash
 
-# Version: 2019-03-02-01
+# Version: 2019-03-03-01
 
 # package manager commands
 package_list_update_command='apt-get update';
 package_check_available_command='apt-cache show';
 package_check_installed_command='dpkg -l';
 package_install_command='apt-get install %s -y';
+package_show_latest_version_command="apt-cache policy %s | grep 'Candidate'";
 
 # supported Java packages
 java_package_install_list=( 'openjdk-11-jre' 'openjdk-8-jre' );
