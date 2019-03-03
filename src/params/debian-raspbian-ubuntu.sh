@@ -10,7 +10,7 @@ package_install_command='apt-get install %s -y';
 package_show_latest_version_command="apt-cache policy %s | grep 'Candidate'";
 
 # supported Java packages
-java_package_install_list=( 'openjdk-11-jre' 'openjdk-8-jre' 'oracle-java8-installer' );
+java_package_install_list=( 'openjdk-11-jre' 'openjdk-8-jre' );
 
 # service management
 service_autostart_add_command='update-rc.d %s defaults';
@@ -65,6 +65,9 @@ function add_debian_oracle_java_repo {
   echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu ${ubuntu_equivalent} main" > ${apt_repo_file};
   echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu ${ubuntu_equivalent} main " >> ${apt_repo_file};
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7B2C3B0889BF5709A105D03AC2518248EEA14886 &> /dev/null;
+
+  # updated Java package install name for the Oracle Java package
+  java_package_install_list=( 'oracle-java8-installer' );
 
   echo 'Done, Oracle Java APT repo added to the system.';
   echo;
