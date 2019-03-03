@@ -7,7 +7,7 @@ os_release='';
 
 # Java version check and installation
 java_version_check_command="java -version";
-supported_java_regex='(?:^| )(?:1\.8\.0[_\.](?:[5-9]\d|[1-9]\d\d+)|1\.8\.[1-9]\d*|1\.9|1\.\d\d+|\d{2,}\.\d+\.\d+)';
+supported_java_regex='(?:^| )(?:1\.8\.0[_\.]\d{3}|1\.8\.[1-9]\d*|8u\d{3}|1\.9|1\.\d\d+|\d{2,}\.\d+|\d{2,}u\d+)';
 supported_java_found=0;
 java_install_counter=0;
 

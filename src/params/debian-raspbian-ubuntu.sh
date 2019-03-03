@@ -10,7 +10,7 @@ package_install_command='apt-get install %s -y';
 package_show_latest_version_command="apt-cache policy %s | grep 'Candidate'";
 
 # supported Java packages
-java_package_install_list=( 'openjdk-11-jre' 'openjdk-8-jre' );
+java_package_install_list=( 'openjdk-11-jre' 'openjdk-8-jre' 'oracle-java8-installer' );
 
 # service management
 service_autostart_add_command='update-rc.d %s defaults';
