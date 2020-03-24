@@ -16,6 +16,8 @@ java_package_install_list=( 'openjdk-11-jre' 'openjdk-8-jre' );
 service_autostart_add_command='update-rc.d %s defaults';
 service_autostart_remove_command='update-rc.d -f %s remove';
 
+# FIXME: add supported RPi version checking
+
 function add_java_package_repo {
   case $os_release in
     *"Ubuntu"*)
@@ -60,6 +62,8 @@ function add_debian_oracle_java_repo {
       echo_no_java_supported_packages;
       exit 1;;
   esac;
+
+  echo 'Adding Oracle Java APT repo to the system.';
 
   # add the Oracle Java repo
   echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu ${ubuntu_equivalent} main" > ${apt_repo_file};
