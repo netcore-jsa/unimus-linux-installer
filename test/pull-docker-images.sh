@@ -42,7 +42,7 @@ function echo_pull {
 }
 
 function pull_raspbian {
-  images=( "raspbian/stretch" "raspbian/jessie" );
+  images=( "resin/raspberry-pi-debian:buster" "raspbian/stretch" "raspbian/jessie" );
   docker_pull ${images[@]};
 }
 
@@ -52,12 +52,12 @@ function pull_amazon_linux {
 }
 
 function pull_centos {
-  images=( "centos:7" "centos:6.10" "centos:6.6" );
+  images=( "centos:8" "centos:7" "centos:6.10" "centos:6.6" );
   docker_pull ${images[@]};
 }
 
 function pull_debian {
-  images=( "debian:9" "debian:8" "debian:7" );
+  images=( "debian:10" "debian:9" "debian:8" "debian:7" );
   docker_pull ${images[@]};
 }
 
@@ -67,7 +67,7 @@ function pull_rhel {
 }
 
 function pull_ubuntu {
-  images=( "ubuntu:18.04" "ubuntu:16.04" "ubuntu:14.04" "ubuntu:12.04" );
+  images=( "ubuntu:20.04" "ubuntu:18.04" "ubuntu:16.04" "ubuntu:14.04" "ubuntu:12.04" );
   docker_pull ${images[@]};
 }
 

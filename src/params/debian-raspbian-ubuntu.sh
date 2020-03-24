@@ -78,7 +78,7 @@ function add_debian_oracle_java_repo {
 }
 
 function echo_java_repo_confirmation {
-  echo "You OS doesn't have the required Java version in its default APT repositories.";
+  echo "Your OS doesn't have the required Java version in its default APT repositories.";
   echo "Would you like the installer to add the latest ${1} APT repo to your system?";
   echo "(will use '${2}')";
   echo;
