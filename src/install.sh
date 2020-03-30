@@ -19,6 +19,9 @@ function main {
   # output installer info
   installer_info;
 
+  # before we deal with services, we need to know the init system
+  check_if_systemd;
+
   # install dependencies
   package_list_update;
   install_dependencies;
@@ -26,9 +29,6 @@ function main {
   # install Java
   check_java;
   install_java;
-
-  # before we deal with services, we need to know the init system
-  check_if_systemd;
 
   # stop Unimus before upgrade / install
   stop_unimus_service;
@@ -131,14 +131,28 @@ function installer_info {
   echo;
 }
 
+function check_if_systemd {
+  if systemctl |& grep -- '-.mount' &> /dev/null; then
+    debug "Detected systemd - YES";
+    is_systemd=1;
+  else
+    debug "Detected systemd - NO";
+    is_systemd=0;
+  fi;
+}
+
 function package_list_update {
   echo 'Updating list of available packages, this might take a while...';
   echo "(running '${package_list_update_command}' to refresh package indexes)";
   echo;
   ${package_list_update_command} ${package_utility_quiet_suffix} 2>&1;
+  echo;
 }
 
 function install_dependencies {
+  # run pre install tasks
+  pre_dependency_install;
+
   for i in "${dependency_packages[@]}"; do
     if ! ${package_check_installed_command} $i &> /dev/null; then
       echo "Installing dependency package '${i}'";
@@ -155,7 +169,11 @@ function install_dependencies {
     fi;
   done;
 
+  # run post install tasks
+  post_dependency_install;
+
   echo 'Package dependencies installed, continuing...';
+  echo;
 }
 
 function check_java {
@@ -177,7 +195,7 @@ function install_java {
   fi;
 
   if [[ $java_install_counter == 0 ]]; then
-    echo 'Supported Java version not found, will install...';
+    echo 'Supported Java version not found, will install Java...';
     echo;
   fi;
 
@@ -196,6 +214,8 @@ function install_java {
         java_package_to_install=$i;
         break;
       fi;
+    else
+      debug "'${i}' package not available for installation";
     fi;
   done;
 
@@ -228,16 +248,6 @@ function install_java {
       echo_no_java_supported_packages;
       exit 1;
     fi;
-  fi;
-}
-
-function check_if_systemd {
-  if systemctl |& grep -- '-.mount' &> /dev/null; then
-    debug "Detected systemd - YES";
-    is_systemd=1;
-  else
-    debug "Detected systemd - NO";
-    is_systemd=0;
   fi;
 }
 

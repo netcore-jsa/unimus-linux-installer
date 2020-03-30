@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Version: 2018-02-28-01
-
 # Credit:
 # While this file was heavily modified by us, it's based on this original file
 # https://orrsella.com/2014/11/06/initd-and-start-scripts-for-scala-java-server-apps
@@ -13,7 +11,7 @@
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Unimus server
-# Description:       Configuration backup and management solution for networking equipment.
+# Description:       Network Configuration Management and Automation
 ### END INIT INFO
 
 # Unimus .jar path
