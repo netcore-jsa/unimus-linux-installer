@@ -19,10 +19,13 @@ function main {
   # output installer info
   installer_info;
 
-  # install Java and dependencies
+  # install dependencies
+  package_list_update;
+  install_dependencies;
+
+  # install Java
   check_java;
   install_java;
-  install_dependencies;
 
   # before we deal with services, we need to know the init system
   check_if_systemd;
@@ -106,6 +109,33 @@ function installer_info {
   echo;
 }
 
+function package_list_update {
+  echo 'Updating list of available packages, this might take a while...';
+  echo "(running '${package_list_update_command}' to refresh package indexes)";
+  echo;
+  ${package_list_update_command} ${package_utility_quiet_suffix} 2>&1;
+}
+
+function install_dependencies {
+  for i in "${dependency_packages[@]}"; do
+    if ! ${package_check_installed_command} $i &> /dev/null; then
+      echo "Installing dependency package '${i}'";
+
+      local dependency_install_command=$(printf "${package_install_command}" "${i}");
+      ${dependency_install_command} ${package_utility_quiet_suffix} 2>&1;
+
+      if [[ $? != 0 ]]; then
+        echo "WARNING: installing package '${i}' failed!";
+        echo 'Please install this package manually.';
+        echo "(command: '${dependency_install_command}')";
+        echo;
+      fi;
+    fi;
+  done;
+
+  echo 'Package dependencies installed, continuing...';
+}
+
 function check_java {
   echo 'Checking if supported Java installed...'
   if type java &> /dev/null; then
@@ -130,11 +160,6 @@ function install_java {
   fi;
 
   local java_package_to_install='';
-
-  echo 'Updating list of available packages, this might take a while...';
-  echo "(running '${package_list_update_command}' to refresh package indexes)";
-  echo;
-  ${package_list_update_command} &> /dev/null;
 
   # check if any of supported packages installable
   for i in "${java_package_install_list[@]}"; do
@@ -179,26 +204,6 @@ function install_java {
       exit 1;
     fi;
   fi;
-}
-
-function install_dependencies {
-  for i in "${dependency_packages[@]}"; do
-    if ! ${package_check_installed_command} $i &> /dev/null; then
-      echo "Installing dependency package '${i}'";
-
-      local dependency_install_command=$(printf "${package_install_command}" "${i}");
-      ${dependency_install_command} &> /dev/null;
-
-      if [[ $? != 0 ]]; then
-        echo "WARNING: installing package '${i}' failed!";
-        echo 'Please install this package manually.';
-        echo "(command: '${dependency_install_command}')";
-        echo;
-      fi;
-    fi;
-  done;
-
-  echo 'Package dependencies installed, continuing...';
 }
 
 function check_if_systemd {
