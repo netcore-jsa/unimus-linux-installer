@@ -161,7 +161,7 @@ function install_dependencies {
 function check_java {
   echo 'Checking if supported Java installed...'
   if type java &> /dev/null; then
-    if ${java_version_check_command} |& grep -P "${supported_java_regex}" &> /dev/null; then
+    if ${java_version_check_command} |& grep -E "${supported_java_regex}" &> /dev/null; then
       echo 'Supported Java version found, continuing...'
       supported_java_found=1;
       return;
@@ -190,7 +190,8 @@ function install_java {
 
     if [[ $? == 0 ]]; then
       # check if package version matches requirements
-      if $(printf "${package_show_latest_version_command}" "${i}") |& grep -P "${supported_java_regex}" &> /dev/null; then
+      debug "'${i}' package available, validating version requirements";
+      if $(printf "${package_show_latest_version_command}" "${i}") |& grep -E "${supported_java_regex}" &> /dev/null; then
         debug "'${i}' package accepted for installation";
         java_package_to_install=$i;
         break;
