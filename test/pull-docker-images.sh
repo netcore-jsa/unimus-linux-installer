@@ -27,7 +27,7 @@ function main {
 
   else
     echo;
-    echo "Unsupported CPU architecture";
+    echo "ERROR: Unsupported CPU architecture";
     echo;
 
     exit 1;

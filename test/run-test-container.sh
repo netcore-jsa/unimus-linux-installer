@@ -15,14 +15,16 @@ function main {
     x64_menu;
 
   else
-    echo "Unsupported CPU architecture";
+    echo "ERROR: Unsupported CPU architecture";
     exit 1;
 
-  fi
+  fi;
 }
 
 function arm_menu {
   echo "Select distribution to start a new container:";
+  echo;
+
   options=( "Resin Buster (10)" "Raspbian Stretch (9)" "Raspbian Jessie (8)" "Quit" );
 
   select opt in "${options[@]}"; do
@@ -31,15 +33,17 @@ function arm_menu {
       2) docker_run "raspbian/stretch";;
       3) docker_run "raspbian/jessie";;
       4) exit;;
-    esac
-  done
+    esac;
+  done;
 }
 
 function x64_menu {
   echo "Select distribution to start a new container:";
-  options=( "Amazon Linux 2" "Amazon Linux AMI" "CentOS 8" "CentOS 7" "CentOS 6.10" "CentOS 6.6" "Debian 10 (Buster)" "Debian 9 (Stretch)" \
-            "Debian 8 (Jessie)" "Debian 7 (Wheeze)" "RHEL 7" "RHEL 6.5" "Ubuntu 20.04" "Ubuntu 18.04" "Ubuntu 16.04" \
-            "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
+  echo;
+
+  options=( "Amazon Linux 2" "Amazon Linux AMI" "CentOS 8" "CentOS 7" "CentOS 6.10" "CentOS 6.6" "Debian 10 (Buster)" \
+            "Debian 9 (Stretch)" "Debian 8 (Jessie)" "Debian 7 (Wheezy)" "RHEL 7" "RHEL 6.5" "Ubuntu 20.04" "Ubuntu 18.04" \
+            "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
 
   select opt in "${options[@]}"; do
     case $REPLY in
@@ -61,14 +65,40 @@ function x64_menu {
       16) docker_run "ubuntu:14.04";;
       17) docker_run "ubuntu:12.04";;
       18) exit;;
-    esac
-  done
+    esac;
+  done;
 }
 
 function docker_run {
-     	docker run -it --rm -p 8085:8085 -v "$(dirname $(pwd))/target:/root/unimus-installer:ro" $1 /bin/bash;
+  echo;
+  echo "Running ${1} container...";
+  echo;
+
+  docker run -it --rm \
+    -p 8085:8085 \
+    -v "$(dirname $(pwd))/target:/root/unimus-installer:ro" \
+    -v "$(dirname $(pwd))/target:/root/core-installer:ro" \
+    -v "$(dirname $(pwd))/test/container-scripts:/root/container-scripts:ro" \
+    -e UNATTENDED="${unattended}" \
+    -e DEBUG="${debug}" \
+    -e IMAGE="${1}" \
+    $1 /root/container-scripts/post-start.sh;
 }
 
-
 # script entry point
+unattended=0;
+debug=0;
+
+if [[ ! -z "$1" ]]; then
+  if [[ "$1" == "true" || "$1" == "1" ]]; then
+    unattended=1;
+  fi;
+fi;
+
+if [[ ! -z "$2" ]]; then
+  if [[ "$2" == "true" || "$2" == "1" ]]; then
+    debug=1;
+  fi;
+fi;
+
 main;
