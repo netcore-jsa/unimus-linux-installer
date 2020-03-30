@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Version: 2019-03-03-01
-
 # package manager commands
 package_list_update_command='yum check-update';
 package_check_available_command='yum info';
@@ -16,6 +14,9 @@ java_package_install_list=( 'java-11-openjdk' 'java-1.8.0-openjdk' );
 # service management
 service_autostart_add_command='chkconfig %s on';
 service_autostart_remove_command='chkconfig %s off';
+
+# add EPEL repository
+dependency_packages=( "epel-release" "${dependency_packages[@]}" );
 
 function add_java_package_repo {
   echo_no_java_supported_packages;

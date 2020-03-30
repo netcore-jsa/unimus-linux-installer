@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Version: 2019-03-03-01
-
 # OS release (will be populated during run-time)
 os_release='';
 
@@ -26,6 +24,24 @@ function echo_no_java_supported_packages {
   echo;
   echo 'Alternatively, please contact us so we can add support for your OS.';
   echo;
+}
+
+# perform pre dependency install tasks
+function pre_dependency_install {
+  debug "Default no-op pre dependency task";
+}
+
+# perform post dependency install tasks
+function post_dependency_install {
+  debug "Enabling 'haveged' service";
+
+  if [[ $is_systemd == 1 ]]; then
+    systemctl enable haveged &> /dev/null;
+    systemctl start haveged &> /dev/null;
+  else
+    $(printf "${service_autostart_add_command}" "haveged") &> /dev/null;
+    service haveged start &> /dev/null;
+  fi;
 }
 
 #----------------------------------------------------------------#

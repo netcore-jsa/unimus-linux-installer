@@ -74,6 +74,9 @@ function get_os_parameters {
     *"Amazon Linux"*)
       debug "Loading 'aws-centos-rhel.sh' parameters";
       <source-replace|params/aws-centos-rhel.sh|source-replace>;
+
+      debug "Loading 'aws.sh' parameters";
+      <source-replace|params/aws.sh|source-replace>;
       ;;
     *"CentOS"*)
       debug "Loading 'aws-centos-rhel.sh' parameters";
