@@ -206,7 +206,7 @@ function install_java {
 
     local java_install_command=$(printf "${package_install_command}" "${java_package_to_install}");
 
-    ${java_install_command} 2>&1;
+    ${java_install_command} ${package_utility_quiet_suffix} 2>&1;
 
     if [[ $? != 0 ]]; then
       echo;

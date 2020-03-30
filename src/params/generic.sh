@@ -37,6 +37,7 @@ package_list_update_command='';
 package_check_available_command='';
 package_check_installed_command='';
 package_install_command='';
+package_utility_quiet_suffix='';
 package_show_latest_version_command='';
 
 # supported Java packages

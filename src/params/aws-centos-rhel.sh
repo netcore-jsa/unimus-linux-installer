@@ -7,6 +7,7 @@ package_list_update_command='yum check-update';
 package_check_available_command='yum info';
 package_check_installed_command='yum list installed';
 package_install_command='yum install %s -y';
+package_utility_quiet_suffix='-q';
 package_show_latest_version_command="yum info %s | grep 'Version'";
 
 # supported Java packages
