@@ -57,7 +57,7 @@ function pull_centos {
 }
 
 function pull_debian {
-  images=( "debian:10" "debian:9" "debian:8" "debian:7" );
+  images=( "debian:10" "debian:9" "debian:8" );
   docker_pull ${images[@]};
 }
 
