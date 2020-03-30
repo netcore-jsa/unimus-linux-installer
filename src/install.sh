@@ -46,14 +46,22 @@ function main {
   post_install_info;
 }
 
+function debug {
+  if [[ $debug == 1 ]]; then
+    echo "DEBUG: ${1}";
+  fi;
+}
+
 function check_root {
   # check if root
   local user=$(whoami);
+  debug "Running as user '${user}'";
+
   if [[ $user != "root" ]]; then
-      echo 'This installer requires root privileges.';
-      echo 'Please switch to root and run the installer again.';
-      echo;
-      exit 1;
+    echo 'ERROR: This installer requires root privileges.';
+    echo 'Please switch to root and run the installer again.';
+    echo;
+    exit 1;
   fi;
 }
 
@@ -64,20 +72,31 @@ function get_os_parameters {
   # import OS-specific parameters
   case $os_release in
     *"Amazon Linux"*)
-      <source-replace|params/aws-centos-rhel.sh|source-replace>;;
+      debug "Loading 'aws-centos-rhel.sh' parameters";
+      <source-replace|params/aws-centos-rhel.sh|source-replace>;
+      ;;
     *"CentOS"*)
-      <source-replace|params/aws-centos-rhel.sh|source-replace>;;
+      debug "Loading 'aws-centos-rhel.sh' parameters";
+      <source-replace|params/aws-centos-rhel.sh|source-replace>;
+      ;;
     *"Debian"*)
-      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;;
+      debug "Loading 'debian-raspbian-ubuntu.sh' parameters";
+      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;
+      ;;
     *"Raspbian"*)
-      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;;
+      debug "Loading 'debian-raspbian-ubuntu.sh' parameters";
+      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;
+      ;;
     *"Red Hat Enterprise Linux"*)
-      <source-replace|params/aws-centos-rhel.sh|source-replace>;;
+      debug "Loading 'aws-centos-rhel.sh' parameters";
+      <source-replace|params/aws-centos-rhel.sh|source-replace>;
+      ;;
     *"Ubuntu"*)
-      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;;
-
+      debug "Loading 'debian-raspbian-ubuntu.sh' parameters";
+      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;
+      ;;
     *)
-      echo "We are sorry, but the installer currently doesn't support your OS.";
+      echo "ERROR: We are sorry, but the installer currently doesn't support your OS.";
       echo 'Please check our wiki for generic Linux / Unix / Mac install instructions.';
       echo;
       exit 1;
@@ -101,10 +120,13 @@ function installer_info {
   echo 'If you experience any issues with this installer, or have any questions, please contact us.';
   echo '(email, website live-chat, forums, create a support ticket, etc.)';
   echo;
-  echo 'Press ENTER to continue, or Ctrl+C to exit:';
 
-  read -s;
-  echo;
+  if [[ $unattended == 0 ]]; then
+    echo 'Press ENTER to continue, or Ctrl+C to exit:';
+    read -s;
+    echo;
+  fi
+
   echo '-----------------------------------------------------------------';
   echo;
 }
@@ -163,11 +185,13 @@ function install_java {
 
   # check if any of supported packages installable
   for i in "${java_package_install_list[@]}"; do
+    debug "Checking if '${i}' package available";
     ${package_check_available_command} $i &> /dev/null;
 
     if [[ $? == 0 ]]; then
       # check if package version matches requirements
       if $(printf "${package_show_latest_version_command}" "${i}") |& grep -P "${supported_java_regex}" &> /dev/null; then
+        debug "'${i}' package accepted for installation";
         java_package_to_install=$i;
         break;
       fi;
@@ -208,8 +232,10 @@ function install_java {
 
 function check_if_systemd {
   if systemctl |& grep -- '-.mount' &> /dev/null; then
+    debug "Detected systemd - YES";
     is_systemd=1;
   else
+    debug "Detected systemd - NO";
     is_systemd=0;
   fi;
 }
@@ -298,4 +324,19 @@ function post_install_info {
 }
 
 # script entry point
+unattended=0;
+debug=0;
+
+if [[ ! -z "$1" ]]; then
+  if [[ "$1" == "true" || "$1" == "1" ]]; then
+    unattended=1;
+  fi;
+fi;
+
+if [[ ! -z "$2" ]]; then
+  if [[ "$2" == "true" || "$2" == "1" ]]; then
+    debug=1;
+  fi;
+fi;
+
 main;

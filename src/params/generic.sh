@@ -19,7 +19,7 @@ dependency_packages=( 'curl' 'haveged' 'procps' );
 
 # echo supported Java not available message
 function echo_no_java_supported_packages {
-  echo 'It seems none of the supported Java packages were found.';
+  echo 'ERROR: It seems none of the supported Java packages were found.';
   echo;
   echo 'This usually happens when you try to run the installer on an unsupported OS.'
   echo 'You can try to install Java 8 or newer manually and restart this installer.';
@@ -47,7 +47,7 @@ service_autostart_add_command='';
 service_autostart_remove_command='';
 
 function add_java_package_repo {
-  echo 'This function should be overridden by OS-specific params.';
+  echo 'ERROR: This function should be overridden by OS-specific params.';
   echo 'If you are seeing this, something is wrong... please let us know about this.';
   echo;
   exit 1;
