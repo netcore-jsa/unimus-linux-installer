@@ -35,7 +35,7 @@ case $selected_profile in
 esac;
 
 # make target directory if missing
-if [ ! -d "target" ]; then
+if [[ ! -d "target" ]]; then
   mkdir "target";
 fi
 
@@ -70,7 +70,7 @@ find . -type f -exec sed -i -r "s#<get-replace\|(.+?)\|(.+?)\|get-replace>#$(pri
 # FIXME generate per-application init/unit files
 
 # if running in test profile, make scripts executable
-if [[ $selected_profile == 'test' ]]; then
+if [[ ${selected_profile} == 'test' ]]; then
   chmod -R +x .;
 fi
 

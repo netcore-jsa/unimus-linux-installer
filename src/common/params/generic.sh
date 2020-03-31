@@ -12,6 +12,9 @@ java_install_counter=0;
 # init system used
 is_systemd=0;
 
+# start application after installation
+start_after_install=1;
+
 # other package dependencies
 dependency_packages=( 'curl' 'haveged' 'procps' );
 
@@ -35,7 +38,7 @@ function pre_dependency_install {
 function post_dependency_install {
   debug "Enabling 'haveged' service";
 
-  if [[ $is_systemd == 1 ]]; then
+  if [[ ${is_systemd} == 1 ]]; then
     systemctl enable haveged &> /dev/null;
     systemctl start haveged &> /dev/null;
   else

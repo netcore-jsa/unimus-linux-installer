@@ -3,11 +3,11 @@
 function main {
   lscpu=$(lscpu);
 
-  if [[ $lscpu == *ARM* ]]; then
+  if [[ ${lscpu} == *ARM* ]]; then
     echo_pull "Raspbian";
     pull_raspbian;
 
-  elif [[ $lscpu == *x86_64* ]]; then
+  elif [[ ${lscpu} == *x86_64* ]]; then
     echo_pull "Amazon Linux";
     pull_amazon_linux;
 

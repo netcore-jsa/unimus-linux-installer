@@ -1,9 +1,6 @@
 #!/bin/bash
 
 function main {
-  # set workdir to the script dir
-  cd "$(dirname "$0")";
-
   # set installer behavior
   parse_args;
 
@@ -48,7 +45,7 @@ function main {
 }
 
 function debug {
-  if [[ $debug == 1 ]]; then
+  if [[ ${debug} == 1 ]]; then
     echo "DEBUG: ${1}";
   fi;
 }
@@ -71,7 +68,7 @@ function check_root {
   local user=$(whoami);
   debug "Running as user '${user}'";
 
-  if [[ $user != "root" ]]; then
+  if [[ ${user} != "root" ]]; then
     echo;
     echo 'ERROR: This installer requires root privileges.';
     echo 'Please switch to root and run the installer again.';
@@ -144,11 +141,11 @@ function installer_info {
   echo '(email, website live-chat, forums, create a support ticket, etc.)';
   echo;
 
-  if [[ $interactive == 1 ]]; then
+  if [[ ${interactive} == 1 ]]; then
     echo 'Press ENTER to continue, or Ctrl+C to exit:';
     read -s;
     echo;
-  fi
+  fi;
 
   echo '-----------------------------------------------------------------';
   echo;
@@ -213,11 +210,11 @@ function check_java {
 }
 
 function install_java {
-  if [[ $supported_java_found == 1 ]]; then
+  if [[ ${supported_java_found} == 1 ]]; then
     return;
   fi;
 
-  if [[ $java_install_counter == 0 ]]; then
+  if [[ ${java_install_counter} == 0 ]]; then
     echo 'Supported Java version not found, will install Java...';
     echo;
   fi;
@@ -242,7 +239,7 @@ function install_java {
     fi;
   done;
 
-  if [[ $java_package_to_install != '' ]]; then
+  if [[ ${java_package_to_install} != '' ]]; then
     echo "Installing Java - '${java_package_to_install}'";
     echo 'This can take a considerable amount of time...';
     echo;
@@ -259,7 +256,7 @@ function install_java {
       exit 1;
     fi;
   else
-    if [[ $java_install_counter == 0 ]]; then
+    if [[ ${java_install_counter} == 0 ]]; then
       # add OpenJDK APT repo
       add_java_package_repo;
       ((java_install_counter++));
@@ -275,7 +272,7 @@ function install_java {
 }
 
 function stop_application_service {
-  if [[ $is_systemd == 1 ]]; then
+  if [[ ${is_systemd} == 1 ]]; then
     if systemctl status ${service_name} &> /dev/null; then
       echo "The running ${product_name} service will now be stopped.";
       systemctl stop ${service_name} &> /dev/null;
@@ -289,7 +286,7 @@ function stop_application_service {
 }
 
 function remove_application_autostart {
-  if [[ $is_systemd == 1 ]]; then
+  if [[ ${is_systemd} == 1 ]]; then
     echo "${product_name} service will now be removed from auto-start.";
     systemctl disable ${service_name} &> /dev/null;
   else
@@ -307,7 +304,7 @@ function download_application_binary {
 function download_application_support_files {
   echo;
   echo 'Downloading init/unit file...';
-  if [[ $is_systemd == 1 ]]; then
+  if [[ ${is_systemd} == 1 ]]; then
     # for legacy reasons, make sure we don't have an init script even when running systemd
     rm /etc/init.d/${service_name} &> /dev/null;
 
@@ -319,7 +316,7 @@ function download_application_support_files {
   fi;
 
   # create basic settings file (if not already present)
-  if [ ! -f /etc/default/${service_name} ]; then
+  if [[ ! -f "/etc/default/${service_name}" ]]; then
     echo "-Xms256M -Xmx768M -Djava.security.egd=file:/dev/./urandom" > /etc/default/${service_name};
   fi;
 }
@@ -331,8 +328,8 @@ function post_download_task {
 function add_application_autostart {
   # register application service auto-start
   echo;
-  echo "Configuring ${product_name} service to auto-start...";
-  if [[ $is_systemd == 1 ]]; then
+  echo "Configuring ${product_name} service to auto-start after boot...";
+  if [[ ${is_systemd} == 1 ]]; then
     systemctl enable ${service_name} &> /dev/null;
   else
     $(printf "${service_autostart_add_command}" "${service_name}") &> /dev/null;
@@ -340,11 +337,13 @@ function add_application_autostart {
 }
 
 function start_application_service {
-  # start application service
-  echo "Starting the ${product_name} service...";
-  if [[ $is_systemd == 1 ]]; then
-    systemctl start ${service_name} 2>&1;
-  else
-    service ${service_name} start 2>&1;
+  if [[ ${start_after_install} == 1 ]]; then
+    # start application service
+    echo "Starting the ${product_name} service...";
+    if [[ ${is_systemd} == 1 ]]; then
+      systemctl start ${service_name} 2>&1;
+    else
+      service ${service_name} start 2>&1;
+    fi;
   fi;
 }

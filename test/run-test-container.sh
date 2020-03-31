@@ -6,10 +6,10 @@ function main {
 
   lscpu=$(lscpu);
 
-  if [[ $lscpu == *ARM* ]]; then
+  if [[ ${lscpu} == *ARM* ]]; then
     arm_menu;
 
-  elif [[ $lscpu == *x86_64* ]]; then
+  elif [[ ${lscpu} == *x86_64* ]]; then
     x64_menu;
 
   else

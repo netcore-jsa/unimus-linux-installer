@@ -44,7 +44,7 @@ function add_ubuntu_openjdk_ppa {
   echo "(will use '${openjdk_apt_repo_file}')";
   echo;
 
-  if [[ $interactive == 1 ]]; then
+  if [[ ${interactive} == 1 ]]; then
     echo 'Press ENTER to continue, or Ctrl+C to exit:';
     read -s;
     echo;
@@ -78,7 +78,7 @@ function add_debian_backports {
   echo "(will use '${backports_repo_file}')";
   echo;
 
-  if [[ $interactive == 1 ]]; then
+  if [[ ${interactive} == 1 ]]; then
     echo 'Press ENTER to continue, or Ctrl+C to exit:';
     read -s;
     echo;
