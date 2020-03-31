@@ -1,20 +1,18 @@
 #!/bin/bash
 
-# Version: 2019-03-03-01
-
 function main {
   # set workdir to the script dir
   cd "$(dirname "$0")";
 
-  echo;
+  # set installer behavior
+  parse_args;
 
   # check if installer running as 'root'
   check_root;
 
-  # import generic cross-OS parameters
-  <source-replace|params/generic.sh|source-replace>;
-  # get per-OS parameters
-  get_os_parameters;
+  # import generic cross-OS and specific per-OS parameters
+  get_generic_parameters;
+  get_per_os_parameters;
 
   # output installer info
   installer_info;
@@ -30,17 +28,20 @@ function main {
   check_java;
   install_java;
 
-  # stop Unimus before upgrade / install
-  stop_unimus_service;
-  remove_unimus_autostart;
+  # stop application before upgrade / install
+  stop_application_service;
+  remove_application_autostart;
 
-  # get Unimus
-  download_unimus;
-  download_unimus_support_files;
+  # get application binary & support files
+  download_application_binary;
+  download_application_support_files;
 
-  # start Unimus after upgrade / install
-  add_unimus_autostart;
-  start_unimus_service;
+  # post application download task
+  post_download_task;
+
+  # start application after upgrade / install
+  add_application_autostart;
+  start_application_service;
 
   # post-install info
   post_install_info;
@@ -52,12 +53,26 @@ function debug {
   fi;
 }
 
+function parse_args {
+  for i in ${run_args[@]}; do
+    case ${i} in
+      "-d") # debug mode
+        debug=1;;
+      "-u") # unattended mode
+        interactive=0;;
+    esac;
+  done;
+
+  debug "debug='${debug}', interactive='${interactive}'";
+}
+
 function check_root {
   # check if root
   local user=$(whoami);
   debug "Running as user '${user}'";
 
   if [[ $user != "root" ]]; then
+    echo;
     echo 'ERROR: This installer requires root privileges.';
     echo 'Please switch to root and run the installer again.';
     echo;
@@ -65,7 +80,11 @@ function check_root {
   fi;
 }
 
-function get_os_parameters {
+function get_generic_parameters {
+  <source-replace|params/generic.sh|source-replace>;
+}
+
+function get_per_os_parameters {
   # get OS release file
   os_release=$(cat /etc/*release);
 
@@ -109,22 +128,23 @@ function get_os_parameters {
 
 function installer_info {
   # inform the user what this installer will do
-  echo 'Welcome to the Unimus installer!';
+  echo;
+  echo "Welcome to the ${product_name} installer!";
   echo;
   echo 'This installer will perform the following steps:';
   echo '1) Install a compatible Java version (if not already present)';
   echo "2) Install dependencies [${dependency_packages[@]}] (if not already present)";
-  echo '3) Install the latest version of Unimus';
-  echo '4) Configure Unimus to start at boot';
-  echo '5) Start Unimus';
+  echo "3) Install the latest version of ${product_name}";
+  echo "4) Configure ${product_name} to start at boot";
+  echo "5) Start ${product_name}";
   echo;
-  echo 'If you are upgrading from a previous version, your current Unimus service will be stopped and restarted automatically.';
+  echo "If you are upgrading from a previous version, your current ${product_name} service will be stopped and restarted automatically.";
   echo;
   echo 'If you experience any issues with this installer, or have any questions, please contact us.';
   echo '(email, website live-chat, forums, create a support ticket, etc.)';
   echo;
 
-  if [[ $unattended == 0 ]]; then
+  if [[ $interactive == 1 ]]; then
     echo 'Press ENTER to continue, or Ctrl+C to exit:';
     read -s;
     echo;
@@ -254,103 +274,77 @@ function install_java {
   fi;
 }
 
-function stop_unimus_service {
+function stop_application_service {
   if [[ $is_systemd == 1 ]]; then
-    if systemctl status unimus &> /dev/null; then
-      echo 'The running Unimus service will now be stopped.';
-      systemctl stop unimus &> /dev/null;
+    if systemctl status ${service_name} &> /dev/null; then
+      echo "The running ${product_name} service will now be stopped.";
+      systemctl stop ${service_name} &> /dev/null;
     fi;
   else
-    if service unimus status &> /dev/null; then
-      echo 'The running Unimus service will now be stopped.';
-      service unimus stop &> /dev/null;
+    if service ${service_name} status &> /dev/null; then
+      echo "The running ${product_name} service will now be stopped.";
+      service ${service_name} stop &> /dev/null;
     fi;
   fi;
 }
 
-function remove_unimus_autostart {
+function remove_application_autostart {
   if [[ $is_systemd == 1 ]]; then
-    echo 'Unimus service will now be removed from auto-start.';
-    systemctl disable unimus &> /dev/null;
+    echo "${product_name} service will now be removed from auto-start.";
+    systemctl disable ${service_name} &> /dev/null;
   else
-    echo 'Unimus service will now be removed from auto-start.';
-    $(printf "${service_autostart_remove_command}" "unimus") &> /dev/null;
+    echo "${product_name} service will now be removed from auto-start.";
+    $(printf "${service_autostart_remove_command}" "${service_name}") &> /dev/null;
   fi;
 }
 
-function download_unimus {
+function download_application_binary {
   echo;
-  echo 'Downloading Unimus...';
-  curl https://unimus.net/download/-%20Latest/Unimus.jar --create-dirs -o /opt/unimus/Unimus.jar 2>&1;
+  echo "Downloading ${product_name}...";
+  curl ${binary_download_url} --create-dirs -o ${binary_path} 2>&1;
 }
 
-function download_unimus_support_files {
+function download_application_support_files {
   echo;
   echo 'Downloading init/unit file...';
   if [[ $is_systemd == 1 ]]; then
     # for legacy reasons, make sure we don't have an init script even when running systemd
-    rm /etc/init.d/unimus &> /dev/null;
+    rm /etc/init.d/${service_name} &> /dev/null;
 
-    <get-replace|systemd/unimus.service|/etc/systemd/system/unimus.service|get-replace>;
+    <get-replace|systemd/${service_name}.service|/etc/systemd/system/${service_name}.service|get-replace>;
     systemctl daemon-reload &> /dev/null;
   else
-    <get-replace|sysv/init|/etc/init.d/unimus|get-replace>;
-    chmod +x /etc/init.d/unimus 2>&1;
+    <get-replace|sysv/init|/etc/init.d/${service_name}|get-replace>;
+    chmod +x /etc/init.d/${service_name} 2>&1;
   fi;
 
   # create basic settings file (if not already present)
-  if [ ! -f /etc/default/unimus ]; then
-    echo "-Xms256M -Xmx768M -Djava.security.egd=file:/dev/./urandom" > /etc/default/unimus;
+  if [ ! -f /etc/default/${service_name} ]; then
+    echo "-Xms256M -Xmx768M -Djava.security.egd=file:/dev/./urandom" > /etc/default/${service_name};
   fi;
 }
 
-function add_unimus_autostart {
-# register Unimus service auto-start
+function post_download_task {
+  debug "Default empty post download task";
+}
+
+function add_application_autostart {
+  # register application service auto-start
   echo;
-  echo 'Configuring Unimus service to auto-start...';
+  echo "Configuring ${product_name} service to auto-start...";
   if [[ $is_systemd == 1 ]]; then
-    systemctl enable unimus &> /dev/null;
+    systemctl enable ${service_name} &> /dev/null;
   else
-    $(printf "${service_autostart_add_command}" "unimus") &> /dev/null;
+    $(printf "${service_autostart_add_command}" "${service_name}") &> /dev/null;
   fi;
 }
 
-function start_unimus_service {
-  # start Unimus service
-  echo 'Starting the Unimus service...';
+function start_application_service {
+  # start application service
+  echo "Starting the ${product_name} service...";
   if [[ $is_systemd == 1 ]]; then
-    systemctl start unimus 2>&1;
+    systemctl start ${service_name} 2>&1;
   else
-    service unimus start 2>&1;
+    service ${service_name} start 2>&1;
   fi;
 }
-
-function post_install_info {
-  echo;
-  echo '-------------------------------------------------------------------------------------';
-  echo;
-  echo 'Unimus should now be installed and starting.'
-  echo 'Please note it can take up to 30 seconds for the web interface to start responding.'
-  echo "If Unimus UI doesn't start, please check the '/var/log/unimus/unimus.log' log file.";
-  echo;
-  echo "You can visit 'http://your_server_ip:8085/' to reach the Unimus UI.";
-  echo;
-}
-
-# script entry point
-unattended=0;
-debug=0;
-
-if [[ ! -z "$1" ]]; then
-  if [[ "$1" == "true" || "$1" == "1" ]]; then
-    unattended=1;
-  fi;
-fi;
-
-if [[ ! -z "$2" ]]; then
-  if [[ "$2" == "true" || "$2" == "1" ]]; then
-    debug=1;
-  fi;
-fi;
-
-main;
