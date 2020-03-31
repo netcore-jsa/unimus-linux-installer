@@ -1,32 +1,57 @@
-# Unimus Linux installer
+# NetCore product Linux installers
 
-This repository contains the sources for the official Unimus Linux installer.
+This repository contains the sources for the official NetCore j.s.a. Linux installers.  
+These installers are used by Unimus and Unimus Core.
 
-### Building the installer
-You can check the `src` directory for the actual installer sources.
+### TL;DR
+Requirements: `bash`, `docker`.
+```bash
+./build.sh test
+./test/run-test-container.sh -c=ubuntu:18.04 -p=unimus -u
+``` 
+
+### How do the installers work?
+
+Installers are split between shared code (in the `common` directory), and product-specific code 
+(each in the appropriate per-product directory). You can check the `src` directory for the actual installer sources.
+
+The `build.sh` script takes the shared and per-product code and generates complete and runnable bash 
+installer scripts for each of our products.
+
+### Building the installers
 
 How to build runnable installer scripts:
-```
+```bash
 ./build.sh test
 cd target
 ls -l
+tree
 ```
 
-### Testing the installer
+### Testing the installers
 
 In `test` you can find the scripts that utilize Docker to test the installer on various Linux distributions that we support.
 Please make sure you have Docker working before running the test scripts.
 
-How to test the installer:
+How to test the installers:
 * run the script to spawn a test container:
-```
+```bash
 ./test/run-test-container.sh
 ```
-* Select the distribution you want to test in the menu.
+* Select the distribution you want to test from the menu
   
-* After you get the bash prompt in your selected distribution, run:
-```
-/root/unimus-installer/install.sh
+* Select which product to install from the menu
+
+### Unattended (automated) testing
+
+You can pull all officially supported images using the `pull-docker-images.sh` script.
+
+Test scripts support unattended (automated) installation.  
+You can pass the following arguments to the `run-test-container.sh` script:
+```text
+-c=[image-name]                 image to spawn the container from
+-p=[unimus|unimus-core]         product to install (Unimus or Unimus Core)
+-u                              run the product installer in unattended mode 
 ```
 
 ### Contributing
