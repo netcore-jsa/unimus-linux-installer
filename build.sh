@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Version: 2019-02-28-01
-
 # set workdir to the script dir
 cd "$(dirname "$0")";
 
@@ -47,13 +45,29 @@ rm -r target/* &> /dev/null;
 echo;
 echo "Building in '${selected_profile}' profile...";
 
+products=( 'unimus' 'unimus-core' );
+
+for i in ${products[@]}; do
+  mkdir "target/${i}";
+  cp src/${i}/*.sh "target/${i}";
+done;
+
 # copy scripts from src to target
-cp -r src/* target;
+common_dirs=( 'functions' 'params' 'systemd' 'sysv' );
+
+for i in ${common_dirs[@]}; do
+  for p in ${products[@]}; do
+    cp -r "src/common/${i}" "target/${p}";
+  done;
+done;
+
 cd target;
 
 # replace script parts as per profile
 find . -type f -exec sed -i -r "s#<source-replace\|(.+?)\|source-replace>#$(printf "${source_command}" "\1")#" {} +;
 find . -type f -exec sed -i -r "s#<get-replace\|(.+?)\|(.+?)\|get-replace>#$(printf "${get_command}" "\1" "\2")#" {} +;
+
+# FIXME generate per-application init/unit files
 
 # if running in test profile, make scripts executable
 if [[ $selected_profile == 'test' ]]; then
