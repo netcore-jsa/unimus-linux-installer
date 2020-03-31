@@ -5,7 +5,7 @@ These installers are used by Unimus and Unimus Core.
 
 ### TL;DR
 Requirements: `bash`, `docker`.
-```bash
+```text
 ./build.sh test
 ./test/run-test-container.sh -c=ubuntu:18.04 -p=unimus -u
 ``` 
@@ -21,7 +21,7 @@ installer scripts for each of our products.
 ### Building the installers
 
 How to build runnable installer scripts:
-```bash
+```text
 ./build.sh test
 cd target
 ls -l
@@ -35,7 +35,7 @@ Please make sure you have Docker working before running the test scripts.
 
 How to test the installers:
 * run the script to spawn a test container:
-```bash
+```text
 ./test/run-test-container.sh
 ```
 * Select the distribution you want to test from the menu
@@ -49,9 +49,9 @@ You can pull all officially supported images using the `pull-docker-images.sh` s
 Test scripts support unattended (automated) installation.  
 You can pass the following arguments to the `run-test-container.sh` script:
 ```text
--c=[image-name]                 image to spawn the container from
--p=[unimus|unimus-core]         product to install (Unimus or Unimus Core)
--u                              run the product installer in unattended mode 
+-c=[image-name]             image to spawn the container from
+-p=[unimus|unimus-core]     product to install (Unimus or Unimus Core)
+-u                          run the product installer in unattended mode 
 ```
 
 ### Contributing
