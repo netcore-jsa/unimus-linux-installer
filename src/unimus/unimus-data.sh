@@ -8,3 +8,6 @@ binary_download_url='https://unimus.net/download/-%20Latest/Unimus.jar';
 
 service_name='unimus';
 binary_path='/opt/unimus/Unimus.jar';
+
+config_file='/etc/unimus/unimus.properties';
+log_file='/var/log/unimus/unimus.log';
