@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # some containers (especially old ones) need fixing before they are usable
-case $IMAGE in
+case ${IMAGE} in
   *"centos"*|*"amazonlinux"*)
     echo "Running post-start fixes for '${IMAGE}'";
     echo;
@@ -13,14 +13,14 @@ esac;
 
 
 
-options=( "Core installer" "Unimus installer" "Shell (bash)" "Quit" );
+options=( "Unimus installer" "Unimus Core installer" "Shell (bash)" "Quit" );
 
 select opt in "${options[@]}"; do
   case $REPLY in
-    1) product="core";
+    1) product="unimus";
        break;;
 
-    2) product="unimus";
+    2) product="unimus-core";
        break;;
 
     3) /bin/bash;;
@@ -34,7 +34,7 @@ done;
 
 # run install script
 echo;
-/root/container-scripts/run-install.sh ${product};
+/root/container-scripts/run-install.sh ${product} ${UNATTENDED} ${DEBUG};
 
 # run post-install checks
 echo;

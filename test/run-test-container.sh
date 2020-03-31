@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Version: 2019-02-27-01
-
 function main {
   # set workdir to the script dir
   cd "$(dirname "$0")";
@@ -75,8 +73,8 @@ function docker_run {
 
   docker run -it --rm \
     -p 8085:8085 \
-    -v "$(dirname $(pwd))/target:/root/unimus-installer:ro" \
-    -v "$(dirname $(pwd))/target:/root/core-installer:ro" \
+    -v "$(dirname $(pwd))/target/unimus:/root/unimus-installer:ro" \
+    -v "$(dirname $(pwd))/target/unimus-core:/root/unimus-core-installer:ro" \
     -v "$(dirname $(pwd))/test/container-scripts:/root/container-scripts:ro" \
     -e UNATTENDED="${unattended}" \
     -e DEBUG="${debug}" \
@@ -85,19 +83,16 @@ function docker_run {
 }
 
 # script entry point
-unattended=0;
-debug=0;
+unattended='';
+debug='';
 
-if [[ ! -z "$1" ]]; then
-  if [[ "$1" == "true" || "$1" == "1" ]]; then
-    unattended=1;
-  fi;
-fi;
-
-if [[ ! -z "$2" ]]; then
-  if [[ "$2" == "true" || "$2" == "1" ]]; then
-    debug=1;
-  fi;
-fi;
+for i in "$@"; do
+  case ${i} in
+    "-u") # unattended mode
+      unattended='-u';;
+    "-d") # debug mode
+      debug='-d';;
+  esac;
+done;
 
 main;

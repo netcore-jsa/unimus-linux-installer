@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Version: 2019-02-27-01
-
 function main {
   lscpu=$(lscpu);
 

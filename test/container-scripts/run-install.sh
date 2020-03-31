@@ -1,6 +1,10 @@
 #! /bin/bash
 
 product=$1;
+unattended=$2;
+debug=$3;
+
+cd /root/${product}-installer
 
 echo "Running ${product} installer...";
-/root/${product}-installer/install.sh "${UNATTENDED}" "${DEBUG}" | tee /root/install.log;
+./install.sh "${unattended}" "${debug}" | tee /root/install.log;
