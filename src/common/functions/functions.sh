@@ -308,7 +308,7 @@ function download_application_support_files {
     # for legacy reasons, make sure we don't have an init script even when running systemd
     rm /etc/init.d/${service_name} &> /dev/null;
 
-    <get-replace|systemd/${service_name}.service|/etc/systemd/system/${service_name}.service|get-replace>;
+    <get-replace|systemd/service|/etc/systemd/system/${service_name}.service|get-replace>;
     systemctl daemon-reload &> /dev/null;
   else
     <get-replace|sysv/init|/etc/init.d/${service_name}|get-replace>;

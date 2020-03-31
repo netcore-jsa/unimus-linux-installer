@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e;
+
 # set workdir to the script dir
 cd "$(dirname "$0")";
 
@@ -21,14 +23,16 @@ else
   done;
 fi;
 
-case $selected_profile in
+case ${selected_profile} in
   test)
-    source_command="source <(cat ./%s)";
-    get_command="cp ./%s %s";
+    from='./%.0s%s'; # we ignore the product argument here
+    source_command="source <(cat ${from})";
+    get_command="cp ${from} %s";
     ;;
   prod)
-    source_command="source <(curl -sS 'https://unimus.net/download/linux-v2/%s')";
-    get_command="curl https://unimus.net/download/linux-v2/%s -o %s 2>&1')";
+    from='https://unimus.net/download/linux-v2/%s/%s';
+    source_command="source <(curl -sS '${from}')";
+    get_command="curl '${from}' -o %s 2>&1')";
     ;;
   Quit)
     exit;;
@@ -63,11 +67,25 @@ done;
 
 cd target;
 
-# replace script parts as per profile
-find . -type f -exec sed -i -r "s#<source-replace\|(.+?)\|source-replace>#$(printf "${source_command}" "\1")#" {} +;
-find . -type f -exec sed -i -r "s#<get-replace\|(.+?)\|(.+?)\|get-replace>#$(printf "${get_command}" "\1" "\2")#" {} +;
+for i in ${products[@]}; do
+  cd ${i};
 
-# FIXME generate per-application init/unit files
+  # replace script parts as per profile
+  find . -type f -exec sed -i -r "s#<source-replace\|(.+?)\|source-replace>#$(printf "${source_command}" "${i}" "\1")#" {} +;
+  find . -type f -exec sed -i -r "s#<get-replace\|(.+?)\|(.+?)\|get-replace>#$(printf "${get_command}" "${i}" "\1" "\2")#" {} +;
+
+  # fix init / unit files
+  files=( 'systemd/service' 'sysv/init' );
+  replacements=( 'product_name' 'short_description' 'long_description' 'service_name' 'binary_path' );
+  for f in ${files[@]}; do
+    for r in ${replacements[@]}; do
+      data=$(sed -n -E "s/^${r}='(.+?)';$/\1/p" "${i}-data.sh");
+      sed -i "s@<|${r}|>@${data}@g" "${f}";
+    done;
+  done;
+
+  cd ..;
+done;
 
 # if running in test profile, make scripts executable
 if [[ ${selected_profile} == 'test' ]]; then
