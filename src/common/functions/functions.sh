@@ -78,7 +78,7 @@ function check_root {
 }
 
 function get_generic_parameters {
-  <source-replace|params/generic.sh|source-replace>;
+  <source-replace|os-params/generic.sh|source-replace>;
 }
 
 function get_per_os_parameters {
@@ -89,30 +89,30 @@ function get_per_os_parameters {
   case $os_release in
     *"Amazon Linux"*)
       debug "Loading 'aws-centos-rhel.sh' parameters";
-      <source-replace|params/aws-centos-rhel.sh|source-replace>;
+      <source-replace|os-params/aws-centos-rhel.sh|source-replace>;
 
       debug "Loading 'aws.sh' parameters";
-      <source-replace|params/aws.sh|source-replace>;
+      <source-replace|os-params/aws.sh|source-replace>;
       ;;
     *"CentOS"*)
       debug "Loading 'aws-centos-rhel.sh' parameters";
-      <source-replace|params/aws-centos-rhel.sh|source-replace>;
+      <source-replace|os-params/aws-centos-rhel.sh|source-replace>;
       ;;
     *"Debian"*)
       debug "Loading 'debian-raspbian-ubuntu.sh' parameters";
-      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;
+      <source-replace|os-params/debian-raspbian-ubuntu.sh|source-replace>;
       ;;
     *"Raspbian"*)
       debug "Loading 'debian-raspbian-ubuntu.sh' parameters";
-      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;
+      <source-replace|os-params/debian-raspbian-ubuntu.sh|source-replace>;
       ;;
     *"Red Hat Enterprise Linux"*)
       debug "Loading 'aws-centos-rhel.sh' parameters";
-      <source-replace|params/aws-centos-rhel.sh|source-replace>;
+      <source-replace|os-params/aws-centos-rhel.sh|source-replace>;
       ;;
     *"Ubuntu"*)
       debug "Loading 'debian-raspbian-ubuntu.sh' parameters";
-      <source-replace|params/debian-raspbian-ubuntu.sh|source-replace>;
+      <source-replace|os-params/debian-raspbian-ubuntu.sh|source-replace>;
       ;;
     *)
       echo "ERROR: We are sorry, but the installer currently doesn't support your OS.";

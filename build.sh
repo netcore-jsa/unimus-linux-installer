@@ -58,7 +58,7 @@ for i in ${products[@]}; do
 done;
 
 # copy scripts from src to target
-common_dirs=( 'params' 'systemd' 'sysv' );
+common_dirs=( 'os-params' 'systemd' 'sysv' );
 
 for i in ${common_dirs[@]}; do
   for p in ${products[@]}; do
