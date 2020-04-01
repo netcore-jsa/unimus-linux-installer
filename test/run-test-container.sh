@@ -5,17 +5,18 @@ function main {
   cd "$(dirname "$0")";
 
   lscpu=$(lscpu);
+  if [ -z "${image}"]; then
+      if [[ ${lscpu} == *ARM* ]]; then
+        arm_menu;
 
-  if [[ ${lscpu} == *ARM* ]]; then
-    arm_menu;
-
-  elif [[ ${lscpu} == *x86_64* ]]; then
-    x64_menu;
-
-  else
-    echo "ERROR: Unsupported CPU architecture";
-    exit 1;
-
+      elif [[ ${lscpu} == *x86_64* ]]; then
+        x64_menu;
+      else
+        echo "ERROR: Unsupported CPU architecture";
+        exit 1;
+      fi;
+  else    
+      docker_run ${image};
   fi;
 }
 
@@ -72,27 +73,47 @@ function docker_run {
   echo;
 
   docker run -it --rm \
-    -p 8085:8085 \
+    -p ${port}:8085 \
     -v "$(dirname $(pwd))/target/unimus:/root/unimus-installer:ro" \
     -v "$(dirname $(pwd))/target/unimus-core:/root/unimus-core-installer:ro" \
     -v "$(dirname $(pwd))/test/container-scripts:/root/container-scripts:ro" \
     -e UNATTENDED="${unattended}" \
     -e DEBUG="${debug}" \
     -e IMAGE="${1}" \
+    -e PORT="${port}" \
+    -e PRODUCT="${product}" \
     $1 /root/container-scripts/post-start.sh;
 }
+
+PRODUCTS=("unimus" "unimus-core");
 
 # script entry point
 unattended='';
 debug='';
+image='';
+product='';
+port=$((RANDOM * 10001 / 32768 + 10000));
 
-for i in "$@"; do
-  case ${i} in
-    "-u") # unattended mode
-      unattended='-u';;
-    "-d") # debug mode
-      debug='-d';;
-  esac;
-done;
+
+
+
+while getopts "udc:p:" opt; do
+    case "$opt" in
+    u)  unattended='-u';  # unattended mode
+        ;;
+    d)  debug='-d' #debug mode
+        ;;
+    c)  image=$OPTARG 
+        ;;
+    p) product=${OPTARG}
+        ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      ;;
+    esac
+done
+
+
+
 
 main;

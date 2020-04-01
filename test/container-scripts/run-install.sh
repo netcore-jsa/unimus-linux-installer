@@ -1,10 +1,12 @@
 #! /bin/bash
 
-product=$1;
-unattended=$2;
-debug=$3;
+port=$1;
+product=$2;
+unattended=$3;
+debug=$4;
+
 
 cd /root/${product}-installer
 
 echo "Running ${product} installer...";
-./install.sh "${unattended}" "${debug}" | tee /root/install.log;
+./install.sh "${unattended}" "${debug}" "-p=${port}" | tee /root/install.log;

@@ -57,11 +57,14 @@ function parse_args {
         debug=1;;
       "-u") # unattended mode
         interactive=0;;
+      -p=*) # expose port
+        port="${i#*=}";;
     esac;
   done;
 
-  debug "debug='${debug}', interactive='${interactive}'";
+  debug "debug='${debug}', interactive='${interactive}' port=${port}";
 }
+
 
 function check_root {
   # check if root
