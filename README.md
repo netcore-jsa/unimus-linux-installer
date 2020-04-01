@@ -7,7 +7,7 @@ These installers are used by Unimus and Unimus Core.
 Requirements: `bash`, `docker`.
 ```text
 ./build.sh test
-./test/run-test-container.sh -c ubuntu:18.04 -punimus -u
+./test/run-test-container.sh -c ubuntu:18.04 -p unimus -u
 ``` 
 
 ### How do the installers work?
