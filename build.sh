@@ -54,10 +54,11 @@ products=( 'unimus' 'unimus-core' );
 for i in ${products[@]}; do
   mkdir "target/${i}";
   cp src/${i}/*.sh "target/${i}";
+  cp "src/common/functions/functions.sh" "target/${i}";
 done;
 
 # copy scripts from src to target
-common_dirs=( 'functions' 'params' 'systemd' 'sysv' );
+common_dirs=( 'params' 'systemd' 'sysv' );
 
 for i in ${common_dirs[@]}; do
   for p in ${products[@]}; do
