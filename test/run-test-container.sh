@@ -106,9 +106,11 @@ while getopts 'udc:p:' opt; do
   esac;
 done;
 
-if [[ ! " ${supported_products[@]} " =~ " ${product} " ]]; then
-  echo "ERROR: product '${product}' not supported";
-  exit 1;
+if [[ ! ${product} == '' ]]; then
+  if [[ ! " ${supported_products[@]} " =~ " ${product} " ]]; then
+    echo "ERROR: product '${product}' not supported";
+    exit 1;
+  fi;
 fi;
 
 main;
