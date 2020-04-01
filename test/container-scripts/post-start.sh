@@ -7,6 +7,8 @@ case ${IMAGE} in
     echo;
 
     yum install initscripts -y -q;
+    yum update ca-certificates -y -q;
+    yum update nss -y -q;
     echo;
     ;;
 esac;
