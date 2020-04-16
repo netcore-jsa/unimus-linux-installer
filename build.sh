@@ -57,8 +57,8 @@ for p in ${products[@]}; do
       ;;
     prod)
       from="https://unimus.net/download-${p}/linux-v2/%s";
-      source_command="source <(curl -sS '${from}')";
-      get_command="curl '${from}' -o %s 2>&1')";
+      source_command="source <(curl -LsS '${from}')";
+      get_command="curl -L '${from}' -o %s')";
       ;;
   esac;
 

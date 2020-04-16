@@ -165,7 +165,7 @@ function package_list_update {
   echo 'Updating list of available packages, this might take a while...';
   echo "(running '${package_list_update_command}' to refresh package indexes)";
   echo;
-  ${package_list_update_command} ${package_utility_quiet_suffix} 2>&1;
+  ${package_list_update_command} ${package_utility_quiet_suffix};
   echo;
 }
 
@@ -178,7 +178,7 @@ function install_dependencies {
       echo "Installing dependency package '${i}'";
 
       local dependency_install_command=$(printf "${package_install_command}" "${i}");
-      ${dependency_install_command} ${package_utility_quiet_suffix} 2>&1;
+      ${dependency_install_command} ${package_utility_quiet_suffix};
 
       if [[ $? != 0 ]]; then
         echo "WARNING: installing package '${i}' failed!";
@@ -246,7 +246,7 @@ function install_java {
 
     local java_install_command=$(printf "${package_install_command}" "${java_package_to_install}");
 
-    ${java_install_command} ${package_utility_quiet_suffix} 2>&1;
+    ${java_install_command} ${package_utility_quiet_suffix};
 
     if [[ $? != 0 ]]; then
       echo;
@@ -298,7 +298,7 @@ function remove_application_autostart {
 function download_application_binary {
   echo;
   echo "Downloading ${product_name}...";
-  curl ${binary_download_url} --create-dirs -o ${binary_path} 2>&1;
+  curl -L ${binary_download_url} --create-dirs -o ${binary_path};
 }
 
 function download_application_support_files {
@@ -312,7 +312,7 @@ function download_application_support_files {
     systemctl daemon-reload &> /dev/null;
   else
     <get-replace|sysv/init|/etc/init.d/${service_name}|get-replace>;
-    chmod +x /etc/init.d/${service_name} 2>&1;
+    chmod +x /etc/init.d/${service_name};
   fi;
 
   # create basic settings file (if not already present)
@@ -341,9 +341,9 @@ function start_application_service {
     # start application service
     echo "Starting the ${product_name} service...";
     if [[ ${is_systemd} == 1 ]]; then
-      systemctl start ${service_name} 2>&1;
+      systemctl start ${service_name};
     else
-      service ${service_name} start 2>&1;
+      service ${service_name} start;
     fi;
   fi;
 }
