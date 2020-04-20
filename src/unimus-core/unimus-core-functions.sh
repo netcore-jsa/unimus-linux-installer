@@ -10,6 +10,8 @@ function post_download_task {
   fi;
 
   if [[ ${interactive} == 1 ]]; then
+    default_server_port=5509;
+
     echo;
     echo '-------------------------------------------------------------------------------------';
     echo 'Unimus Core requires connection information for the Unimus Server this Core should connect to.';
@@ -17,9 +19,14 @@ function post_download_task {
     echo "(you can always change these setting later in the '${config_file}' config file)";
     echo;
     echo 'Please provide the requested information:';
-    read -p "Unimus Server address: " server_address
-    read -p "Unimus Server port (default 5509): " server_port
-    read -p "Unimus Server access key: " server_access_key
+    read -p 'Unimus Server address: ' server_address
+    read -p "Unimus Server port (default ${default_server_port}): " server_port
+    read -p 'Unimus Server access key: ' server_access_key
+
+    # set default port if empty
+    if [[ -z "${server_port// }" ]]; then
+      server_port=${default_server_port};
+    fi;
 
     # build config file
     echo '# Core config file' > ${config_file};
