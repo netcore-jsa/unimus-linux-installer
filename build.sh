@@ -32,12 +32,13 @@ if [[ ! -d 'target' ]]; then
 fi
 
 # target cleanup
-rm -r target/* &> /dev/null;
+rm -r target/* &> /dev/null || true;
 
 products=( 'unimus' 'unimus-core' );
 common_dirs=( 'os-params' 'systemd' 'sysv' );
 
 for p in ${products[@]}; do
+  echo "Making 'target/${p}'";
   mkdir "target/${p}";
 
   cp src/${p}/*.sh "target/${p}";
