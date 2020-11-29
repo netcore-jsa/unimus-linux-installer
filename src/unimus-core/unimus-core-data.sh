@@ -4,7 +4,7 @@ product_name='Unimus Core';
 short_description='Unimus Remote Core';
 long_description='Remote Core (remote proxy / remote agent) for Unimus Server';
 
-binary_download_url='https://unimus.net/download-unimus-core/-%20Latest/Unimus-Core.jar';
+binary_download_url='https://download.unimus.net/unimus-core/-%20Latest/Unimus-Core.jar';
 
 service_name='unimus-core';
 binary_path='/opt/unimus-core/Unimus-Core.jar';
