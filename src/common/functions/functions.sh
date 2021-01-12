@@ -106,6 +106,10 @@ function get_per_os_parameters {
       debug "Loading 'debian-raspbian-ubuntu.sh' parameters";
       <source-replace|os-params/debian-raspbian-ubuntu.sh|source-replace>;
       ;;
+    *"Oracle Linux"*)
+      debug "Loading 'oracle-linux.sh' parameters";
+      <source-replace|os-params/oracle-linux.sh|source-replace>;
+      ;;
     *"Red Hat Enterprise Linux"*)
       debug "Loading 'aws-centos-rhel.sh' parameters";
       <source-replace|os-params/aws-centos-rhel.sh|source-replace>;

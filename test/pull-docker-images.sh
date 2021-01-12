@@ -20,6 +20,9 @@ function main {
     echo_pull "RHEL";
     pull_rhel;
 
+    echo_pull "OL";
+    pull_ol;
+
     echo_pull "Ubuntu";
     pull_ubuntu;
 
@@ -61,6 +64,11 @@ function pull_debian {
 
 function pull_rhel {
   images=( "richxsl/rhel7" "richxsl/rhel6.5" );
+  docker_pull ${images[@]};
+}
+
+function pull_ol {
+  images=( "oraclelinux:8" "oraclelinux:7" );
   docker_pull ${images[@]};
 }
 
