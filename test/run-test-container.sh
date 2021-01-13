@@ -41,8 +41,8 @@ function x64_menu {
   echo;
 
   options=( "Amazon Linux 2" "Amazon Linux AMI" "CentOS 8" "CentOS 7" "CentOS 6.10" "CentOS 6.6" "Debian 10 (Buster)" \
-            "Debian 9 (Stretch)" "Debian 8 (Jessie)" "RHEL 7" "RHEL 6.5" "Ubuntu 20.04" "Ubuntu 18.04" "Ubuntu 16.04" \
-            "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
+            "Debian 9 (Stretch)" "Debian 8 (Jessie)" "RHEL 7" "RHEL 6.5" "OL 8" "OL 7" "Ubuntu 20.04" "Ubuntu 18.04" \
+            "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
 
   select opt in "${options[@]}"; do
     case $REPLY in
@@ -57,12 +57,14 @@ function x64_menu {
       9) docker_run "debian:8";;
       10) docker_run "richxsl/rhel7";;
       11) docker_run "richxsl/rhel6.5";;
-      12) docker_run "ubuntu:20.04";;
-      13) docker_run "ubuntu:18.04";;
-      14) docker_run "ubuntu:16.04";;
-      15) docker_run "ubuntu:14.04";;
-      16) docker_run "ubuntu:12.04";;
-      17) exit;;
+      12) docker_run "oraclelinux:8";;
+      13) docker_run "oraclelinux:7";;
+      14) docker_run "ubuntu:20.04";;
+      15) docker_run "ubuntu:18.04";;
+      16) docker_run "ubuntu:16.04";;
+      17) docker_run "ubuntu:14.04";;
+      18) docker_run "ubuntu:12.04";;
+      19) exit;;
     esac;
   done;
 }
