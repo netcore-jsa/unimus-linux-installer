@@ -8,6 +8,9 @@ function main {
     pull_raspbian;
 
   elif [[ ${lscpu} == *x86_64* ]]; then
+    echo_pull "AlmaLinux";
+    pull_almalinux;
+
     echo_pull "Amazon Linux";
     pull_amazon_linux;
 
@@ -44,6 +47,11 @@ function echo_pull {
 
 function pull_raspbian {
   images=( "resin/raspberry-pi-debian:buster" "raspbian/stretch" "raspbian/jessie" );
+  docker_pull ${images[@]};
+}
+
+function pull_almalinux {
+  images=( "almalinux:8" );
   docker_pull ${images[@]};
 }
 
