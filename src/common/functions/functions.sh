@@ -87,6 +87,10 @@ function get_per_os_parameters {
 
   # import OS-specific parameters
   case $os_release in
+    *"AlmaLinux"*)
+      debug "Loading 'aws-centos-rhel.sh' parameters";
+      <source-replace|os-params/aws-centos-rhel.sh|source-replace>;
+      ;;
     *"Amazon Linux"*)
       debug "Loading 'aws-centos-rhel.sh' parameters";
       <source-replace|os-params/aws-centos-rhel.sh|source-replace>;
