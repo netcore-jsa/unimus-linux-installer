@@ -40,7 +40,7 @@ function x64_menu {
   echo "Select distribution to start a new container:";
   echo;
 
-  options=( "AlmaLinux 8" "Amazon Linux 2" "Amazon Linux AMI" "CentOS 8" "CentOS 7" "CentOS 6.10" "CentOS 6.6" "Debian 10 (Buster)" \
+  options=( "AlmaLinux 8" "Amazon Linux 2" "Amazon Linux AMI" "CentOS 8" "CentOS 7" "CentOS 6.10" "CentOS 6.6" "Debian 11 (Bullseye)" "Debian 10 (Buster)" \
             "Debian 9 (Stretch)" "Debian 8 (Jessie)" "RHEL 7" "RHEL 6.5" "OL 8" "OL 7" "Ubuntu 20.04" "Ubuntu 18.04" \
             "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
 
@@ -53,19 +53,20 @@ function x64_menu {
       5) docker_run "centos:7";;
       6) docker_run "centos:6.10";;
       7) docker_run "centos:6.6";;
-      8) docker_run "debian:10";;
-      9) docker_run "debian:9";;
-      10) docker_run "debian:8";;
-      11) docker_run "richxsl/rhel7";;
-      12) docker_run "richxsl/rhel6.5";;
-      13) docker_run "oraclelinux:8";;
-      14) docker_run "oraclelinux:7";;
-      15) docker_run "ubuntu:20.04";;
-      16) docker_run "ubuntu:18.04";;
-      17) docker_run "ubuntu:16.04";;
-      18) docker_run "ubuntu:14.04";;
-      19) docker_run "ubuntu:12.04";;
-      20) exit;;
+      8) docker_run "debian:11";;
+      9) docker_run "debian:10";;
+      10) docker_run "debian:9";;
+      11) docker_run "debian:8";;
+      12) docker_run "richxsl/rhel7";;
+      13) docker_run "richxsl/rhel6.5";;
+      14) docker_run "oraclelinux:8";;
+      15) docker_run "oraclelinux:7";;
+      16) docker_run "ubuntu:20.04";;
+      17) docker_run "ubuntu:18.04";;
+      18) docker_run "ubuntu:16.04";;
+      19) docker_run "ubuntu:14.04";;
+      20) docker_run "ubuntu:12.04";;
+      21) exit;;
     esac;
   done;
 }
