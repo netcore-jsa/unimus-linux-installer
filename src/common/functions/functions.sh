@@ -57,10 +57,12 @@ function parse_args {
         debug=1;;
       "-u") # unattended mode
         interactive=0;;
+	    "-m") # minimal upgrade mode
+	      minimal=1;;
     esac;
   done;
 
-  debug "debug='${debug}', interactive='${interactive}'";
+  debug "debug='${debug}', interactive='${interactive}', minimal='$(minimal)'";
 }
 
 function check_root {
@@ -137,22 +139,35 @@ function get_per_os_parameters {
 
 function installer_info {
   # inform the user what this installer will do
-  echo;
-  echo "Welcome to the ${product_name} installer!";
-  echo;
-  echo 'This installer will perform the following steps:';
-  echo '1) Install a compatible Java version (if not already present)';
-  echo "2) Install dependencies [${dependency_packages[@]}] (if not already present)";
-  echo "3) Install the latest version of ${product_name}";
-  echo "4) Configure ${product_name} to start at boot";
-  echo "5) Start ${product_name}";
-  echo;
-  echo "If you are upgrading from a previous version, your current ${product_name} service will be stopped and restarted automatically.";
-  echo;
-  echo 'If you experience any issues with this installer, or have any questions, please contact us.';
-  echo '(email, website live-chat, forums, create a support ticket, etc.)';
-  echo;
-
+  if [[ ${minimal} == 0 ]]; then
+	  echo;
+	  echo "Welcome to the ${product_name} installer!";
+	  echo;
+	  echo 'This installer will perform the following steps:';
+	  echo '1) Install a compatible Java version (if not already present)';
+	  echo "2) Install dependencies [${dependency_packages[@]}] (if not already present)";
+	  echo "3) Install the latest version of ${product_name}";
+	  echo "4) Configure ${product_name} to start at boot";
+	  echo "5) Start ${product_name}";
+	  echo;
+	  echo "If you are upgrading from a previous version, your current ${product_name} service will be stopped and restarted automatically.";
+	  echo;
+	  echo 'If you experience any issues with this installer, or have any questions, please contact us.';
+	  echo '(email, website live-chat, forums, create a support ticket, etc.)';
+	  echo;
+  else
+	  echo;
+	  echo "Welcome to the ${product_name} installer!";
+	  echo;
+	  echo "Minimal upgrade mode detected. This installer will only deploy the latest version of ${product_name} and will not change any existing configuration.";
+	  echo;
+	  echo "Your current ${product_name} service will be stopped and restarted automatically.";
+	  echo;
+	  echo 'If you experience any issues with this installer, or have any questions, please contact us.';
+	  echo '(email, website live-chat, forums, create a support ticket, etc.)';
+	  echo;
+  fi;
+  
   if [[ ${interactive} == 1 ]]; then
     echo 'Press ENTER to continue, or Ctrl+C to exit:';
     read -s;
@@ -174,6 +189,10 @@ function check_if_systemd {
 }
 
 function package_list_update {
+  if [[ ${minimal} == 1 ]]; then
+	  return;
+  fi;
+
   echo 'Updating list of available packages, this might take a while...';
   echo "(running '${package_list_update_command}' to refresh package indexes)";
   echo;
@@ -183,6 +202,10 @@ function package_list_update {
 
 function install_dependencies {
   # run pre install tasks
+  if [[ ${minimal} == 1 ]]; then
+	  return;
+  fi;
+
   pre_dependency_install;
 
   for i in "${dependency_packages[@]}"; do
@@ -222,7 +245,7 @@ function check_java {
 }
 
 function install_java {
-  if [[ ${supported_java_found} == 1 ]]; then
+  if [[ ${supported_java_found} == 1 ]] || [[ ${minimal} == 1 ]]; then
     return;
   fi;
 
@@ -298,6 +321,10 @@ function stop_application_service {
 }
 
 function remove_application_autostart {
+  if [[ ${minimal} == 1 ]]; then
+	  return;
+  fi;
+
   if [[ ${is_systemd} == 1 ]]; then
     echo "${product_name} service will now be removed from auto-start.";
     systemctl disable ${service_name} &> /dev/null;
@@ -314,6 +341,10 @@ function download_application_binary {
 }
 
 function download_application_support_files {
+  if [[ ${minimal} == 1 ]]; then
+	  return;
+  fi;
+
   echo;
   echo 'Downloading init/unit file...';
   if [[ ${is_systemd} == 1 ]]; then
@@ -338,6 +369,10 @@ function post_download_task {
 }
 
 function add_application_autostart {
+  if [[ ${minimal} == 1 ]]; then
+	  return;
+  fi;
+
   # register application service auto-start
   echo;
   echo "Configuring ${product_name} service to auto-start after boot...";
