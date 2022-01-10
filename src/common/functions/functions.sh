@@ -57,12 +57,12 @@ function parse_args {
         debug=1;;
       "-u") # unattended mode
         interactive=0;;
-	    "-m") # minimal upgrade mode
-	      minimal=1;;
+      "-m") # minimal upgrade mode
+      	minimal=1;;
     esac;
   done;
 
-  debug "debug='${debug}', interactive='${interactive}', minimal='$(minimal)'";
+  debug "debug='${debug}', interactive='${interactive}', minimal='${minimal}'";
 }
 
 function check_root {
