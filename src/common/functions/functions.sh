@@ -82,17 +82,13 @@ function check_root {
 
 function check_existing_installation {
   # check existing installation if -m argument (minimal upgrade) is detected
-  for i in ${run_args[@]}; do
-    if [[ $i == '-m' ]]; then
-      if [ -f "${binary_path}" ]; then
-        break;
-      else
-        echo 'ERROR: We are sorry, but a minimal upgrade can be run only on existing installations.';
-        echo "Remove \"-m\" argument to run a full installation/upgrade of ${product_name}.";
-        exit 1;
-      fi;
+  if [[ ${minimal} == 1 ]]; then
+    if [[ ! -f "${binary_path}" ]]; then
+      echo 'ERROR: We are sorry, but a minimal upgrade can be run only on existing installations.';
+      echo "Remove \"-m\" argument to run a full installation/upgrade of ${product_name}.";
+      exit 1;
     fi;
-  done
+  fi;
 }
 
 function get_generic_parameters {
@@ -151,34 +147,27 @@ function get_per_os_parameters {
 
 function installer_info {
   # inform the user what this installer will do
-  if [[ ${minimal} == 0 ]]; then
-	  echo;
-	  echo "Welcome to the ${product_name} installer!";
-	  echo;
-	  echo 'This installer will perform the following steps:';
-	  echo '1) Install a compatible Java version (if not already present)';
-	  echo "2) Install dependencies [${dependency_packages[@]}] (if not already present)";
-	  echo "3) Install the latest version of ${product_name}";
-	  echo "4) Configure ${product_name} to start at boot";
-	  echo "5) Start ${product_name}";
-	  echo;
-	  echo "If you are upgrading from a previous version, your current ${product_name} service will be stopped and restarted automatically.";
-	  echo;
-	  echo 'If you experience any issues with this installer, or have any questions, please contact us.';
-	  echo '(email, website live-chat, forums, create a support ticket, etc.)';
-	  echo;
+  echo;
+  echo "Welcome to the ${product_name} installer!";
+  echo;
+
+  if [[ ${minimal} == 1 ]]; then
+    echo "Minimal upgrade mode detected. This installer will only deploy the latest version of ${product_name} and will not change any existing configuration.";
   else
-	  echo;
-	  echo "Welcome to the ${product_name} installer!";
-	  echo;
-	  echo "Minimal upgrade mode detected. This installer will only deploy the latest version of ${product_name} and will not change any existing configuration.";
-	  echo;
-	  echo "Your current ${product_name} service will be stopped and restarted automatically.";
-	  echo;
-	  echo 'If you experience any issues with this installer, or have any questions, please contact us.';
-	  echo '(email, website live-chat, forums, create a support ticket, etc.)';
-	  echo;
+    echo 'This installer will perform the following steps:';
+    echo '1) Install a compatible Java version (if not already present)';
+    echo "2) Install dependencies [${dependency_packages[@]}] (if not already present)";
+    echo "3) Install the latest version of ${product_name}";
+    echo "4) Configure ${product_name} to start at boot";
+    echo "5) Start ${product_name}";
   fi;
+
+  echo;
+  echo "If you are upgrading from a previous version, your current ${product_name} service will be stopped and restarted automatically.";
+  echo;
+  echo 'If you experience any issues with this installer, or have any questions, please contact us.';
+  echo '(email, website live-chat, forums, create a support ticket, etc.)';
+  echo;
   
   if [[ ${interactive} == 1 ]]; then
     echo 'Press ENTER to continue, or Ctrl+C to exit:';
