@@ -120,10 +120,6 @@ function get_per_os_parameters {
       debug "Loading 'aws-centos-rhel.sh' parameters";
       <source-replace|os-params/aws-centos-rhel.sh|source-replace>;
       ;;
-    *"Rocky Linux"*)
-      debug "Loading 'aws-centos-rhel.sh' parameters";
-      <source-replace|os-params/aws-centos-rhel.sh|source-replace>;
-      ;;
     *"Ubuntu"*)
       debug "Loading 'debian-raspbian-ubuntu.sh' parameters";
       <source-replace|os-params/debian-raspbian-ubuntu.sh|source-replace>;
