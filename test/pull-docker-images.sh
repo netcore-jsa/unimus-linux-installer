@@ -23,6 +23,9 @@ function main {
     echo_pull "RHEL";
     pull_rhel;
 
+    echo_pull "Rocky Linux";
+    pull_rocky_linux;
+
     echo_pull "OL";
     pull_ol;
 
@@ -72,6 +75,11 @@ function pull_debian {
 
 function pull_rhel {
   images=( "richxsl/rhel7" "richxsl/rhel6.5" );
+  docker_pull ${images[@]};
+}
+
+function pull_rocky_linux {
+  images=( "rockylinux/rockylinux:8.5" "rockylinux/rockylinux:8.4" );
   docker_pull ${images[@]};
 }
 
