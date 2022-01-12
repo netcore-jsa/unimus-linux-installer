@@ -15,6 +15,7 @@ cd "$(dirname "$0")";
 # default installer behavior
 interactive=1;
 debug=0;
+minimal=0;
 
 # save provided arguments
 run_args=$@;

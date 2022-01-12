@@ -4,6 +4,49 @@ function main {
   # set installer behavior
   parse_args;
 
+  # set installer type
+  if [[ ${minimal} == 1 ]]; then
+    minimal_upgrade;
+  else
+    standard_installation;
+  fi;
+}
+
+function minimal_upgrade {
+  # check if installer running as 'root'
+  check_root;
+  check_existing_installation;
+
+  # import generic cross-OS and specific per-OS parameters
+  get_generic_parameters;
+  get_per_os_parameters;
+
+  # output installer info
+  installer_info;
+
+  # before we deal with services, we need to know the init system
+  check_if_systemd;
+
+  # install Java
+  check_java;
+
+  # stop application before upgrade / install
+  stop_application_service;
+
+  # get application binary & support files
+  download_application_binary;
+
+  # post application download task
+  post_download_task;
+
+  # start application after upgrade / install
+  start_application_service;
+
+  # post-install info
+  post_install_info;
+}
+
+function standard_installation {
   # check if installer running as 'root'
   check_root;
 
@@ -57,10 +100,12 @@ function parse_args {
         debug=1;;
       "-u") # unattended mode
         interactive=0;;
+      "-m") # minimal upgrade mode
+      	minimal=1;;
     esac;
   done;
 
-  debug "debug='${debug}', interactive='${interactive}'";
+  debug "debug='${debug}', interactive='${interactive}', minimal='${minimal}'";
 }
 
 function check_root {
@@ -74,6 +119,15 @@ function check_root {
     echo 'Please switch to root and run the installer again.';
     echo;
     exit 1;
+  fi;
+}
+
+function check_existing_installation {
+  # check existing installation if -m argument (minimal upgrade) is detected
+  if [[ ! -f "${binary_path}" ]]; then
+      echo 'ERROR: We are sorry, but a minimal upgrade can be run only on existing installations.';
+      echo "Remove \"-m\" argument to run a full installation/upgrade of ${product_name}.";
+      exit 1;
   fi;
 }
 
@@ -140,12 +194,18 @@ function installer_info {
   echo;
   echo "Welcome to the ${product_name} installer!";
   echo;
-  echo 'This installer will perform the following steps:';
-  echo '1) Install a compatible Java version (if not already present)';
-  echo "2) Install dependencies [${dependency_packages[@]}] (if not already present)";
-  echo "3) Install the latest version of ${product_name}";
-  echo "4) Configure ${product_name} to start at boot";
-  echo "5) Start ${product_name}";
+
+  if [[ ${minimal} == 1 ]]; then
+    echo "Minimal upgrade mode detected. This installer will only deploy the latest version of ${product_name} and will not change any existing configuration.";
+  else
+    echo 'This installer will perform the following steps:';
+    echo '1) Install a compatible Java version (if not already present)';
+    echo "2) Install dependencies [${dependency_packages[@]}] (if not already present)";
+    echo "3) Install the latest version of ${product_name}";
+    echo "4) Configure ${product_name} to start at boot";
+    echo "5) Start ${product_name}";
+  fi;
+
   echo;
   echo "If you are upgrading from a previous version, your current ${product_name} service will be stopped and restarted automatically.";
   echo;
