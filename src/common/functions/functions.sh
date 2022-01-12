@@ -6,6 +6,7 @@ function main {
 
   # check if installer running as 'root'
   check_root;
+  check_existing_installation;
 
   # import generic cross-OS and specific per-OS parameters
   get_generic_parameters;
@@ -77,6 +78,21 @@ function check_root {
     echo;
     exit 1;
   fi;
+}
+
+function check_existing_installation {
+  # check existing installation if -m argument (minimal upgrade) is detected
+  for i in ${run_args[@]}; do
+    if [[ $i == '-m' ]]; then
+      if [ -f "${binary_path}" ]; then
+        break;
+      else
+        echo 'ERROR: We are sorry, but a minimal upgrade can be run only on existing installations.';
+        echo "Remove \"-m\" argument to run a full installation/upgrade of ${product_name}.";
+        exit 1;
+      fi;
+    fi;
+  done
 }
 
 function get_generic_parameters {
