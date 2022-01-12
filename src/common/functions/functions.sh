@@ -4,9 +4,51 @@ function main {
   # set installer behavior
   parse_args;
 
+  # set installer type
+  if [[ ${minimal} == 1 ]]; then
+    minimal_upgrade;
+  else
+    standard_installation;
+  fi;
+}
+
+function minimal_upgrade {
   # check if installer running as 'root'
   check_root;
   check_existing_installation;
+
+  # import generic cross-OS and specific per-OS parameters
+  get_generic_parameters;
+  get_per_os_parameters;
+
+  # output installer info
+  installer_info;
+
+  # before we deal with services, we need to know the init system
+  check_if_systemd;
+
+  # install Java
+  check_java;
+
+  # stop application before upgrade / install
+  stop_application_service;
+
+  # get application binary & support files
+  download_application_binary;
+
+  # post application download task
+  post_download_task;
+
+  # start application after upgrade / install
+  start_application_service;
+
+  # post-install info
+  post_install_info;
+}
+
+function standard_installation {
+  # check if installer running as 'root'
+  check_root;
 
   # import generic cross-OS and specific per-OS parameters
   get_generic_parameters;
@@ -82,12 +124,10 @@ function check_root {
 
 function check_existing_installation {
   # check existing installation if -m argument (minimal upgrade) is detected
-  if [[ ${minimal} == 1 ]]; then
-    if [[ ! -f "${binary_path}" ]]; then
+  if [[ ! -f "${binary_path}" ]]; then
       echo 'ERROR: We are sorry, but a minimal upgrade can be run only on existing installations.';
       echo "Remove \"-m\" argument to run a full installation/upgrade of ${product_name}.";
       exit 1;
-    fi;
   fi;
 }
 
@@ -168,7 +208,7 @@ function installer_info {
   echo 'If you experience any issues with this installer, or have any questions, please contact us.';
   echo '(email, website live-chat, forums, create a support ticket, etc.)';
   echo;
-  
+
   if [[ ${interactive} == 1 ]]; then
     echo 'Press ENTER to continue, or Ctrl+C to exit:';
     read -s;
@@ -190,10 +230,6 @@ function check_if_systemd {
 }
 
 function package_list_update {
-  if [[ ${minimal} == 1 ]]; then
-	  return;
-  fi;
-
   echo 'Updating list of available packages, this might take a while...';
   echo "(running '${package_list_update_command}' to refresh package indexes)";
   echo;
@@ -203,10 +239,6 @@ function package_list_update {
 
 function install_dependencies {
   # run pre install tasks
-  if [[ ${minimal} == 1 ]]; then
-	  return;
-  fi;
-
   pre_dependency_install;
 
   for i in "${dependency_packages[@]}"; do
@@ -246,7 +278,7 @@ function check_java {
 }
 
 function install_java {
-  if [[ ${supported_java_found} == 1 ]] || [[ ${minimal} == 1 ]]; then
+  if [[ ${supported_java_found} == 1 ]]; then
     return;
   fi;
 
@@ -322,10 +354,6 @@ function stop_application_service {
 }
 
 function remove_application_autostart {
-  if [[ ${minimal} == 1 ]]; then
-	  return;
-  fi;
-
   if [[ ${is_systemd} == 1 ]]; then
     echo "${product_name} service will now be removed from auto-start.";
     systemctl disable ${service_name} &> /dev/null;
@@ -342,10 +370,6 @@ function download_application_binary {
 }
 
 function download_application_support_files {
-  if [[ ${minimal} == 1 ]]; then
-	  return;
-  fi;
-
   echo;
   echo 'Downloading init/unit file...';
   if [[ ${is_systemd} == 1 ]]; then
@@ -370,10 +394,6 @@ function post_download_task {
 }
 
 function add_application_autostart {
-  if [[ ${minimal} == 1 ]]; then
-	  return;
-  fi;
-
   # register application service auto-start
   echo;
   echo "Configuring ${product_name} service to auto-start after boot...";
