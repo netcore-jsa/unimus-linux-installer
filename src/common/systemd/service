@@ -7,6 +7,9 @@ Type=simple
 WorkingDirectory=/opt/<|service_name|>
 ExecStart=/bin/bash -c '/usr/bin/java $(/bin/cat /etc/default/<|service_name|> 2> /dev/null) -jar <|binary_path|>'
 SuccessExitStatus=143
+LimitNOFILE=65536
+LimitNPROC=65536
+TasksMax=65536
 
 [Install]
 WantedBy=multi-user.target
