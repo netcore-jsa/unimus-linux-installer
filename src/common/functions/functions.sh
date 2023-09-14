@@ -94,7 +94,7 @@ function debug {
 }
 
 function parse_args {
-  for i in ${run_args[@]}; do
+  for i in "${run_args[@]}"; do
     case ${i} in
       "-d") # debug mode
         debug=1;;
@@ -200,7 +200,7 @@ function installer_info {
   else
     echo 'This installer will perform the following steps:';
     echo '1) Install a compatible Java version (if not already present)';
-    echo "2) Install dependencies [${dependency_packages[@]}] (if not already present)";
+    echo "2) Install dependencies [${dependency_packages[*]}] (if not already present)";
     echo "3) Install the latest version of ${product_name}";
     echo "4) Configure ${product_name} to start at boot";
     echo "5) Start ${product_name}";

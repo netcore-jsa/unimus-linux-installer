@@ -37,14 +37,14 @@ rm -r target/* &> /dev/null || true;
 products=( 'unimus' 'unimus-core' );
 common_dirs=( 'os-params' 'systemd' 'sysv' );
 
-for p in ${products[@]}; do
+for p in "${products[@]}"; do
   echo "Making 'target/${p}'";
   mkdir "target/${p}";
 
   cp src/${p}/*.sh "target/${p}";
   cp "src/common/functions/functions.sh" "target/${p}";
 
-  for d in ${common_dirs[@]}; do
+  for d in "${common_dirs[@]}"; do
     cp -r "src/common/${d}" "target/${p}";
   done;
 
@@ -71,8 +71,8 @@ for p in ${products[@]}; do
   files=( 'systemd/service' 'sysv/init' );
   replacements=( 'product_name' 'short_description' 'long_description' 'service_name' 'binary_path' );
 
-  for f in ${files[@]}; do
-    for r in ${replacements[@]}; do
+  for f in "${files[@]}"; do
+    for r in "${replacements[@]}"; do
       data=$(sed -n -E "s/^${r}='(.+?)';$/\1/p" "${p}-data.sh");
       sed -i "s@<|${r}|>@${data}@g" "${f}";
     done;
