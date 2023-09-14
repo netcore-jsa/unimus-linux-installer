@@ -296,9 +296,9 @@ function install_java {
   # check if any of supported packages installable
   for i in "${java_package_install_list[@]}"; do
     debug "Checking if '${i}' package available";
-    ${package_check_available_command} $i &> /dev/null;
+    local package_available=$(${package_check_available_command} $i 2>&1);
 
-    if [[ $? == 0 ]]; then
+    if [[ $? == 0 ]] && [[ "$package_available" != *"No packages found"* ]]; then
       # check if package version matches requirements
       debug "'${i}' package available, validating version requirements";
       if $(printf "${package_show_latest_version_command}" "${i}") |& grep -P "${supported_java_regex}" &> /dev/null; then

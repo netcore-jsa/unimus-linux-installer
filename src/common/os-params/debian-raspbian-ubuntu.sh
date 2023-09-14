@@ -2,7 +2,7 @@
 
 # package manager commands
 package_list_update_command='apt-get update';
-package_check_available_command='apt-cache show';
+package_check_available_command='apt-cache show --quiet=0';
 package_check_installed_command='dpkg -l';
 package_install_command='apt-get install %s -y';
 package_utility_quiet_suffix='-qq';
