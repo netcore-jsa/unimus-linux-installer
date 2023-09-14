@@ -16,7 +16,7 @@ function main {
       exit 1;
     fi;
   else    
-    docker_run ${image};
+    docker_run "${image}";
   fi;
 }
 
@@ -40,9 +40,9 @@ function x64_menu {
   echo "Select distribution to start a new container:";
   echo;
 
-  options=( "AlmaLinux 8" "Amazon Linux 2" "Amazon Linux AMI" "CentOS 8" "CentOS 7" "CentOS 6.10" "CentOS 6.6" "Debian 11 (Bullseye)" "Debian 10 (Buster)" \
-            "Debian 9 (Stretch)" "Debian 8 (Jessie)" "RHEL 7" "RHEL 6.5" "Rocky Linux 8.5" "Rocky Linux 8.4" "OL 8" "OL 7" "Ubuntu 20.04" "Ubuntu 18.04" \
-            "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
+  options=( "AlmaLinux 8" "Amazon Linux 2" "Amazon Linux AMI" "CentOS 8" "CentOS 7" "CentOS 6.10" "CentOS 6.6" "Debian 12 (Bookworm)" "Debian 11 (Bullseye)" \
+            "Debian 10 (Buster)" "Debian 9 (Stretch)" "Debian 8 (Jessie)" "RHEL 7" "RHEL 6.5" "Rocky Linux 8.5" "Rocky Linux 8.4" "OL 8" "OL 7" "Ubuntu 22.04" \
+            "Ubuntu 20.04" "Ubuntu 18.04" "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
 
   select opt in "${options[@]}"; do
     case $REPLY in
@@ -53,22 +53,24 @@ function x64_menu {
       5) docker_run "centos:7";;
       6) docker_run "centos:6.10";;
       7) docker_run "centos:6.6";;
-      8) docker_run "debian:11";;
-      9) docker_run "debian:10";;
-      10) docker_run "debian:9";;
-      11) docker_run "debian:8";;
-      12) docker_run "richxsl/rhel7";;
-      13) docker_run "richxsl/rhel6.5";;
-      14) docker_run "rockylinux/rockylinux:8.5";;
-      15) docker_run "rockylinux/rockylinux:8.4";;
-      16) docker_run "oraclelinux:8";;
-      17) docker_run "oraclelinux:7";;
-      18) docker_run "ubuntu:20.04";;
-      19) docker_run "ubuntu:18.04";;
-      20) docker_run "ubuntu:16.04";;
-      21) docker_run "ubuntu:14.04";;
-      22) docker_run "ubuntu:12.04";;
-      23) exit;;
+      8) docker_run "debian:12";;
+      9) docker_run "debian:11";;
+      10) docker_run "debian:10";;
+      11) docker_run "debian:9";;
+      12) docker_run "debian:8";;
+      13) docker_run "richxsl/rhel7";;
+      14) docker_run "richxsl/rhel6.5";;
+      15) docker_run "rockylinux/rockylinux:8.5";;
+      16) docker_run "rockylinux/rockylinux:8.4";;
+      17) docker_run "oraclelinux:8";;
+      18) docker_run "oraclelinux:7";;
+      19) docker_run "ubuntu:22.04";;
+      20) docker_run "ubuntu:20.04";;
+      21) docker_run "ubuntu:18.04";;
+      22) docker_run "ubuntu:16.04";;
+      23) docker_run "ubuntu:14.04";;
+      24) docker_run "ubuntu:12.04";;
+      25) exit;;
     esac;
   done;
 }
@@ -79,7 +81,7 @@ function docker_run {
   echo;
 
   docker run -it --rm \
-    -p ${host_port}:8085 \
+    -p "${host_port}":8085 \
     -v "$(dirname $(pwd))/target/unimus:/root/unimus-installer:ro" \
     -v "$(dirname $(pwd))/target/unimus-core:/root/unimus-core-installer:ro" \
     -v "$(dirname $(pwd))/test/container-scripts:/root/container-scripts:ro" \

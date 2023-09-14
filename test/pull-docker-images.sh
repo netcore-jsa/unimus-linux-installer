@@ -69,8 +69,8 @@ function pull_centos {
 }
 
 function pull_debian {
-  images=( "debian:11" "debian:10" "debian:9" "debian:8" );
-  docker_pull ${images[@]};
+  images=( "debian:12" "debian:11" "debian:10" "debian:9" "debian:8" );
+  docker_pull "${images[@]}";
 }
 
 function pull_rhel {
@@ -89,7 +89,7 @@ function pull_ol {
 }
 
 function pull_ubuntu {
-  images=( "ubuntu:20.04" "ubuntu:18.04" "ubuntu:16.04" "ubuntu:14.04" "ubuntu:12.04" );
+  images=( "ubuntu:22.04" "ubuntu:20.04" "ubuntu:18.04" "ubuntu:16.04" "ubuntu:14.04" "ubuntu:12.04" );
   docker_pull "${images[@]}";
 }
 
