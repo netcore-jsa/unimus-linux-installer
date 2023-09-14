@@ -35,11 +35,11 @@ function add_java_package_repo {
 function add_ubuntu_openjdk_ppa {
   local openjdk_apt_repo_file='/etc/apt/sources.list.d/openjdk-r.list';
 
-  # make sure 'lsb_release' is available, it should be default be on all Debian-based systems
+  # make sure 'lsb_release' is available, it should by default be on all Debian-based systems
   $(printf "${package_install_command}" 'lsb-release') &> /dev/null;
 
   # confirm repo addition
-  echo "Your OS doesn't have the required Java version in it's default APT repositories.";
+  echo "Your OS doesn't have the required Java version in its default APT repositories.";
   echo "Would you like the installer to add the OpenJDK APT repo to your system?";
   echo "(will use '${openjdk_apt_repo_file}')";
   echo;
@@ -73,7 +73,7 @@ function add_debian_backports {
   local backports_repo_file="/etc/apt/sources.list.d/${os_name}-backports.list";
 
   # confirm backports addition
-  echo "Your OS doesn't have the required Java version in it's default APT repositories.";
+  echo "Your OS doesn't have the required Java version in its default APT repositories.";
   echo "Would you like the installer to add the 'backports' APT repo to your system?";
   echo "(will use '${backports_repo_file}')";
   echo;
