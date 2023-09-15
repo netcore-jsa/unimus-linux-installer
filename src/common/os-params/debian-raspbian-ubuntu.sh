@@ -9,7 +9,7 @@ package_utility_quiet_suffix='-qq';
 package_show_latest_version_command="apt-cache policy %s | grep 'Candidate'";
 
 # supported Java packages
-java_package_install_list=( 'openjdk-11-jre' 'openjdk-8-jre' );
+java_package_install_list=( 'openjdk-11-jre' 'openjdk-8-jre' 'temurin-11-jre' 'temurin-8-jre' );
 
 # service management
 service_autostart_add_command='update-rc.d %s defaults';
@@ -23,7 +23,7 @@ function add_java_package_repo {
     *"Ubuntu"*)
       add_ubuntu_openjdk_ppa;;
     *"Debian"*|*"Raspbian"*)
-      add_debian_backports;;
+      add_debian_repos;;
     *)
       echo_no_java_supported_packages;
       exit 1;;
@@ -61,15 +61,20 @@ function add_ubuntu_openjdk_ppa {
   echo;
 }
 
-function add_debian_backports {
+function add_debian_repos {
   case $os_release in
     *"jessie"*)
-      os_name='jessie';;
+      add_debian_backports "jessie";;
+    *"bookworm"*)
+      add_adoptium_repos;;
     *)
       echo_no_java_supported_packages;
       exit 1;;
   esac;
+}
 
+function add_debian_backports {
+  local os_name="$1";
   local backports_repo_file="/etc/apt/sources.list.d/${os_name}-backports.list";
 
   # confirm backports addition
@@ -93,4 +98,23 @@ function add_debian_backports {
 
   echo "Done, 'backports' APT repo added to the system.";
   echo;
+}
+
+function add_adoptium_repos {
+  # confirm repo addition
+  echo "Your OS doesn't have the required Java version in its default APT repositories.";
+  echo "Would you like the installer to add the 'Eclipse Adoptium' APT repo to your system?";
+  echo "(will use 'https://packages.adoptium.net')";
+  echo;
+
+  if [[ ${interactive} == 1 ]]; then
+    echo 'Press ENTER to continue, or Ctrl+C to exit:';
+    read -s;
+    echo;
+  fi;
+
+  debug "Adding 'Eclipse Adoptium' repo, 'https://packages.adoptium.net'";
+
+  curl -L https://packages.adoptium.net/artifactory/api/gpg/key/public --create-dirs -o /etc/apt/keyrings/adoptium.asc;
+  echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" > /etc/apt/sources.list.d/adoptium.list;
 }
