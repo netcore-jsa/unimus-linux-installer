@@ -94,7 +94,15 @@ function debug {
 }
 
 function parse_args {
-  for i in "${@}"; do
+  if [[ "$#" -eq 0 ]]; then
+    # older version of main install.sh file stored args in a variable
+    local args="${run_args[@]}"
+  else
+    # newer versions of install.sh just pass it as function args
+    local args="${@}"
+  fi
+
+  for i in ${args[@]}; do
     case ${i} in
       "-d") # debug mode
         debug=1;;
