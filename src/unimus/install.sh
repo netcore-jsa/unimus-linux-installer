@@ -17,8 +17,5 @@ interactive=1;
 debug=0;
 minimal=0;
 
-# save provided arguments
-run_args=$@;
-
 # run install script
-main;
+main $@;

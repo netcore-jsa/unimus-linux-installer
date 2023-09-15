@@ -2,7 +2,7 @@
 
 function main {
   # set installer behavior
-  parse_args;
+  parse_args $@;
 
   # set installer type
   if [[ ${minimal} == 1 ]]; then
@@ -94,7 +94,7 @@ function debug {
 }
 
 function parse_args {
-  for i in "${run_args[@]}"; do
+  for i in "${@}"; do
     case ${i} in
       "-d") # debug mode
         debug=1;;
