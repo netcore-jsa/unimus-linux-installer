@@ -81,7 +81,7 @@ function docker_run {
   echo;
 
   docker run -it --rm \
-    -p "${host_port}":8085 \
+    -p "${host_port}:8085" \
     -v "$(dirname $(pwd))/target/unimus:/root/unimus-installer:ro" \
     -v "$(dirname $(pwd))/target/unimus-core:/root/unimus-core-installer:ro" \
     -v "$(dirname $(pwd))/test/container-scripts:/root/container-scripts:ro" \
