@@ -54,7 +54,7 @@ function pull_raspbian {
 }
 
 function pull_almalinux {
-  images=( "almalinux:8" );
+  images=( "almalinux:9" "almalinux:8" );
   docker_pull "${images[@]}";
 }
 
@@ -64,7 +64,7 @@ function pull_amazon_linux {
 }
 
 function pull_centos {
-  images=( "centos:8" "centos:7" "centos:6.10" "centos:6.6" );
+  images=( "centos:9" "centos:8" "centos:7" "centos:6.10" "centos:6.6" );
   docker_pull "${images[@]}";
 }
 
@@ -74,12 +74,12 @@ function pull_debian {
 }
 
 function pull_rhel {
-  images=( "richxsl/rhel7" "richxsl/rhel6.5" );
+  images=( "redhat/ubi9" "redhat/ubi8" "richxsl/rhel7" "richxsl/rhel6.5" );
   docker_pull "${images[@]}";
 }
 
 function pull_rocky_linux {
-  images=( "rockylinux/rockylinux:8.5" "rockylinux/rockylinux:8.4" );
+  images=( "rockylinux:9" "rockylinux/rockylinux:8.5" "rockylinux/rockylinux:8.4" );
   docker_pull "${images[@]}";
 }
 
