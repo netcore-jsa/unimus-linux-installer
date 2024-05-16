@@ -42,8 +42,8 @@ function x64_menu {
 
   options=( "AlmaLinux 9" "AlmaLinux 8" "Amazon Linux 2" "Amazon Linux AMI" "CentOS 9 (Stream)" "CentOS 8" "CentOS 7" "CentOS 6.10" "CentOS 6.6" \
             "Debian 12 (Bookworm)" "Debian 11 (Bullseye)" "Debian 10 (Buster)" "Debian 9 (Stretch)" "Debian 8 (Jessie)" "RHEL 9" "RHEL 8" \
-            "RHEL 7" "RHEL 6.5" "Rocky Linux 9" "Rocky Linux 8.5" "Rocky Linux 8.4" "OL 8" "OL 7" "Ubuntu 22.04" "Ubuntu 20.04" "Ubuntu 18.04" \
-            "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
+            "RHEL 7" "RHEL 6.5" "Rocky Linux 9" "Rocky Linux 8.5" "Rocky Linux 8.4" "OL 8" "OL 7" "Ubuntu 24.04" "Ubuntu 22.04" "Ubuntu 20.04" \
+            "Ubuntu 18.04" "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
 
   select opt in "${options[@]}"; do
     case $REPLY in
@@ -70,13 +70,14 @@ function x64_menu {
       21) docker_run "rockylinux/rockylinux:8.4";;
       22) docker_run "oraclelinux:8";;
       23) docker_run "oraclelinux:7";;
-      24) docker_run "ubuntu:22.04";;
-      25) docker_run "ubuntu:20.04";;
-      26) docker_run "ubuntu:18.04";;
-      27) docker_run "ubuntu:16.04";;
-      28) docker_run "ubuntu:14.04";;
-      29) docker_run "ubuntu:12.04";;
-      30) exit;;
+      24) docker_run "ubuntu:24.04";;
+      25) docker_run "ubuntu:22.04";;
+      26) docker_run "ubuntu:20.04";;
+      27) docker_run "ubuntu:18.04";;
+      28) docker_run "ubuntu:16.04";;
+      29) docker_run "ubuntu:14.04";;
+      30) docker_run "ubuntu:12.04";;
+      31) exit;;
     esac;
   done;
 }
