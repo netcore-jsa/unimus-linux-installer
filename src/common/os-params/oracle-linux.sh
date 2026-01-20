@@ -9,7 +9,7 @@ package_utility_quiet_suffix='-q';
 package_show_latest_version_command="yum info %s | grep 'Version'";
 
 # supported Java packages
-java_package_install_list=( 'java-11-openjdk' 'java-1.8.0-openjdk' );
+java_package_install_list=( 'java-17-openjdk' 'java-11-openjdk' 'java-1.8.0-openjdk' );
 
 # service management
 service_autostart_add_command='chkconfig %s on';
@@ -24,6 +24,9 @@ function pre_dependency_install {
   local epel_package='';
 
   case $os_release in
+    *"Oracle Linux Server 9"*)
+      epel_package='oracle-epel-release-el9';
+      ;;
     *"Oracle Linux Server 8"*)
       epel_package='oracle-epel-release-el8';
       ;;

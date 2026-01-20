@@ -84,7 +84,7 @@ function pull_rocky_linux {
 }
 
 function pull_ol {
-  images=( "oraclelinux:8" "oraclelinux:7" );
+  images=( "oraclelinux:9" "oraclelinux:8" "oraclelinux:7" );
   docker_pull "${images[@]}";
 }
 
