@@ -24,6 +24,9 @@ function pre_dependency_install {
   local epel_package='';
 
   case $os_release in
+    *"Oracle Linux Server 10"*)
+      epel_package='oracle-epel-release-el10';
+      ;;
     *"Oracle Linux Server 9"*)
       epel_package='oracle-epel-release-el9';
       ;;
