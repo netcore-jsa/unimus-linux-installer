@@ -304,12 +304,16 @@ function install_java {
   # check if any of supported packages installable
   for i in "${java_package_install_list[@]}"; do
     debug "Checking if '${i}' package available";
-    local package_available=$(${package_check_available_command} $i 2>&1);
+    # declare and assign separately so $? reflects the command, not 'local'
+    local package_available;
+    package_available=$(${package_check_available_command} $i 2>&1);
 
     if [[ $? == 0 ]] && [[ "$package_available" != *"No packages found"* ]]; then
       # check if package version matches requirements
       debug "'${i}' package available, validating version requirements";
-      if $(printf "${package_show_latest_version_command}" "${i}") |& grep -P "${supported_java_regex}" &> /dev/null; then
+      # the version command contains a pipe, so eval it instead of running its output as a command
+      local version_command=$(printf "${package_show_latest_version_command}" "${i}");
+      if eval "${version_command}" |& grep -P "${supported_java_regex}" &> /dev/null; then
         debug "'${i}' package accepted for installation";
         java_package_to_install=$i;
         break;
