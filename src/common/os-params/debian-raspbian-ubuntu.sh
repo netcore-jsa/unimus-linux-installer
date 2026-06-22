@@ -115,6 +115,6 @@ function add_adoptium_repos {
 
   debug "Adding 'Eclipse Adoptium' repo, 'https://packages.adoptium.net'";
 
-  curl -L https://packages.adoptium.net/artifactory/api/gpg/key/public --create-dirs -o /etc/apt/keyrings/adoptium.asc;
+  curl -fL https://packages.adoptium.net/artifactory/api/gpg/key/public --create-dirs -o /etc/apt/keyrings/adoptium.asc;
   echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" > /etc/apt/sources.list.d/adoptium.list;
 }

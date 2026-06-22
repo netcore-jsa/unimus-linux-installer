@@ -378,7 +378,13 @@ function remove_application_autostart {
 function download_application_binary {
   echo;
   echo "Downloading ${product_name}...";
-  curl -L ${binary_download_url} --create-dirs -o ${binary_path};
+  if ! curl -fL ${binary_download_url} --create-dirs -o ${binary_path}; then
+    echo;
+    echo "ERROR: Failed to download ${product_name} from '${binary_download_url}'.";
+    echo 'Please check your internet connection and try again, or contact us if the problem persists.';
+    echo;
+    exit 1;
+  fi;
 }
 
 function download_application_support_files {
