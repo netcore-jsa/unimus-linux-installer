@@ -64,7 +64,7 @@ function pull_amazon_linux {
 }
 
 function pull_centos {
-  images=( "centos:9" "centos:8" "centos:7" "centos:6.10" "centos:6.6" );
+  images=( "ciready/centos:stream-9-ci-c" "centos:8" "centos:7" "centos:6.10" "centos:6.6" );
   docker_pull "${images[@]}";
 }
 
@@ -89,7 +89,7 @@ function pull_ol {
 }
 
 function pull_ubuntu {
-  images=( "ubuntu:22.04" "ubuntu:20.04" "ubuntu:18.04" "ubuntu:16.04" "ubuntu:14.04" "ubuntu:12.04" );
+  images=( "ubuntu:24.04" "ubuntu:22.04" "ubuntu:20.04" "ubuntu:18.04" "ubuntu:16.04" "ubuntu:14.04" "ubuntu:12.04" );
   docker_pull "${images[@]}";
 }
 
