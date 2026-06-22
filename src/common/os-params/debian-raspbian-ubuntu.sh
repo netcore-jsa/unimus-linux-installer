@@ -65,7 +65,7 @@ function add_debian_repos {
   case $os_release in
     *"jessie"*)
       add_debian_backports "jessie";;
-    *"bookworm"*)
+    *"bookworm"*|*"trixie"*)
       add_adoptium_repos;;
     *)
       echo_no_java_supported_packages;
