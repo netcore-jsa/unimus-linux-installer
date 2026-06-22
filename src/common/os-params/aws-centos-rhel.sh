@@ -9,7 +9,8 @@ package_utility_quiet_suffix='-q';
 package_show_latest_version_command="yum info %s | grep 'Version'";
 
 # supported Java packages
-java_package_install_list=( 'java-11-openjdk' 'java-1.8.0-openjdk' );
+# 17/21 are appended for EL10 (RHEL 10 ships no java-8/11); EL7-9 still match 11/8 first
+java_package_install_list=( 'java-11-openjdk' 'java-1.8.0-openjdk' 'java-17-openjdk' 'java-21-openjdk' );
 
 # service management
 service_autostart_add_command='chkconfig %s on';
