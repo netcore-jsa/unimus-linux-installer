@@ -69,16 +69,16 @@ function x64_menu {
       20) docker_run "rockylinux/rockylinux:8.5";;
       21) docker_run "rockylinux/rockylinux:8.4";;
       22) docker_run "oraclelinux:9";;
-      22) docker_run "oraclelinux:8";;
-      23) docker_run "oraclelinux:7";;
-      24) docker_run "ubuntu:24.04";;
-      25) docker_run "ubuntu:22.04";;
-      26) docker_run "ubuntu:20.04";;
-      27) docker_run "ubuntu:18.04";;
-      28) docker_run "ubuntu:16.04";;
-      29) docker_run "ubuntu:14.04";;
-      30) docker_run "ubuntu:12.04";;
-      31) exit;;
+      23) docker_run "oraclelinux:8";;
+      24) docker_run "oraclelinux:7";;
+      25) docker_run "ubuntu:24.04";;
+      26) docker_run "ubuntu:22.04";;
+      27) docker_run "ubuntu:20.04";;
+      28) docker_run "ubuntu:18.04";;
+      29) docker_run "ubuntu:16.04";;
+      30) docker_run "ubuntu:14.04";;
+      31) docker_run "ubuntu:12.04";;
+      32) exit;;
     esac;
   done;
 }
