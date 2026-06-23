@@ -14,10 +14,12 @@ echoYellow() { echo -e "${yellow}$1${reset}"; }
 
 log_file="/root/install.log";
 
-# real failure signals. Note 'not found' on its own is intentionally NOT a
-# signal: the installer legitimately prints "Supported Java version not found"
-# before installing Java. We match 'command not found' instead.
-problem_regex="error|warn|command not found|permission denied|failed";
+# real failure signals, matched case-sensitively so we catch the installer's
+# own 'ERROR:' / 'WARNING:' prefixes (and genuine shell failures) without
+# tripping on benign lower-case text such as the package name 'libgpg-error',
+# container noise ('Failed to resolve user ...'), or the installer's own
+# "Supported Java version not found" message.
+problem_regex="ERROR:|WARNING:|command not found|[Pp]ermission denied";
 
 echo "Running post-install log checks...";
 
@@ -33,10 +35,10 @@ if ! grep -q "Welcome to the" "${log_file}"; then
   exit 1;
 fi;
 
-if grep -Eiq "${problem_regex}" "${log_file}"; then
+if grep -Eq "${problem_regex}" "${log_file}"; then
   echoRed "Potential problems found:";
   echoRed "----------";
-  grep -Ein -B2 -A2 "${problem_regex}" "${log_file}";
+  grep -En -B2 -A2 "${problem_regex}" "${log_file}";
   exit 1;
 else
   echoGreen "No errors found in log file";
