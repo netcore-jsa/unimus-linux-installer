@@ -42,12 +42,19 @@ echo;
 # run post-install checks
 echo;
 /root/container-scripts/install-error-check.sh;
+check_status=$?;
 
 # echo port mapping
 if [[ ${product} == 'unimus' ]]; then
   echo;
   echo "Port mapping host:${HOST_PORT} -> container:8085";
   echo;
+fi;
+
+# in unattended mode there is no one to use the shell, so exit with the
+# check result (lets CI / automated runs detect failures via exit code)
+if [[ -n "${UNATTENDED}" ]]; then
+  exit ${check_status};
 fi;
 
 # drop the user off in a shell

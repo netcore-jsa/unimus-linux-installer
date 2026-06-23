@@ -96,7 +96,13 @@ function docker_run {
   echo "Running ${1} container...";
   echo;
 
-  docker run -it --rm \
+  # only allocate a TTY when we actually have one (e.g. not in CI / non-interactive runs)
+  local tty_flags='';
+  if [ -t 0 ]; then
+    tty_flags='-it';
+  fi;
+
+  docker run ${tty_flags} --rm \
     -p "${host_port}:8085" \
     -v "$(dirname $(pwd))/target/unimus:/root/unimus-installer:ro" \
     -v "$(dirname $(pwd))/target/unimus-core:/root/unimus-core-installer:ro" \
