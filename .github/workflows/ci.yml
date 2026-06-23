@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build + unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble test profile
+        run: bash ./build.sh test
+
+      - name: Run unit tests
+        run: bash ./test/unit/run-tests.sh
+
+  lint:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # assemble target/ so the generated scripts get linted too
+      - name: Assemble test profile
+        run: bash ./build.sh test
+
+      - name: Run ShellCheck
+        run: |
+          shellcheck --version >/dev/null 2>&1 || (sudo apt-get update && sudo apt-get install -y shellcheck)
+          # severity=error only: the sourced-file architecture makes
+          # SC2034/SC2154 (unused/unassigned vars) inherent false positives,
+          # and SC1090/SC1091 (can't follow dynamic 'source') are expected.
+          shellcheck --severity=error -e SC1090,SC1091 \
+            build.sh \
+            test/*.sh \
+            test/container-scripts/*.sh \
+            test/unit/run-tests.sh \
+            test/unit/assert.sh \
+            test/unit/cases/*.sh \
+            $(find target -name '*.sh')
