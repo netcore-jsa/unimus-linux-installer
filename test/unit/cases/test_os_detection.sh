@@ -58,6 +58,16 @@ load_for "Oracle Linux Server 10.0";
 assert_contains "${package_install_command}" "yum" "Oracle Linux 10 -> yum";
 assert_eq "java-17-openjdk" "${java_package_install_list[0]}" "Oracle Linux uses oracle-linux.sh java list";
 
+# OL10's /etc/redhat-release literally contains "(CentOS Stream)"; it must still
+# load oracle-linux.sh and NOT be captured by the *"CentOS"* branch (which would
+# load aws-centos-rhel.sh, whose java list starts with java-11 and which prepends
+# epel-release to the dependency list).
+load_for 'NAME="Oracle Linux Server"
+Oracle Linux Server release 10.1
+Red Hat Enterprise Linux release 10.1 (CentOS Stream)';
+assert_eq "java-17-openjdk" "${java_package_install_list[0]}" "OL10 with '(CentOS Stream)' string still loads oracle-linux.sh";
+assert_not_contains " ${dependency_packages[*]} " " epel-release " "OL10 deps have no epel-release (not the CentOS/aws branch)";
+
 # --- Amazon Linux 2023: Corretto, and NOT the 'Amazon Linux 2' fallback ---
 load_for "Amazon Linux 2023.5.20240730";
 assert_eq "java-17-amazon-corretto" "${java_package_install_list[0]}" "AL2023 -> Corretto java list";

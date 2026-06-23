@@ -162,6 +162,13 @@ function get_per_os_parameters {
       debug "Loading 'aws.sh' parameters";
       <source-replace|os-params/aws.sh|source-replace>;
       ;;
+    *"Oracle Linux"*)
+      # must be matched before CentOS / Red Hat: Oracle Linux 10's
+      # /etc/redhat-release reads "Red Hat Enterprise Linux release 10.x
+      # (CentOS Stream)", whose "CentOS" substring would otherwise capture it
+      debug "Loading 'oracle-linux.sh' parameters";
+      <source-replace|os-params/oracle-linux.sh|source-replace>;
+      ;;
     *"CentOS"*)
       debug "Loading 'aws-centos-rhel.sh' parameters";
       <source-replace|os-params/aws-centos-rhel.sh|source-replace>;
@@ -173,10 +180,6 @@ function get_per_os_parameters {
     *"Raspbian"*)
       debug "Loading 'debian-raspbian-ubuntu.sh' parameters";
       <source-replace|os-params/debian-raspbian-ubuntu.sh|source-replace>;
-      ;;
-    *"Oracle Linux"*)
-      debug "Loading 'oracle-linux.sh' parameters";
-      <source-replace|os-params/oracle-linux.sh|source-replace>;
       ;;
     *"Red Hat Enterprise Linux"*)
       debug "Loading 'aws-centos-rhel.sh' parameters";
