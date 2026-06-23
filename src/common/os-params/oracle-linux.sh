@@ -9,7 +9,8 @@ package_utility_quiet_suffix='-q';
 package_show_latest_version_command="yum info %s | grep 'Version'";
 
 # supported Java packages
-java_package_install_list=( 'java-17-openjdk' 'java-11-openjdk' 'java-1.8.0-openjdk' );
+# OL10 ships only java-21-openjdk (no 17/11/8), so 21 is appended; OL7-9 still match 17/11/8 first
+java_package_install_list=( 'java-17-openjdk' 'java-11-openjdk' 'java-1.8.0-openjdk' 'java-21-openjdk' );
 
 # service management
 service_autostart_add_command='chkconfig %s on';
