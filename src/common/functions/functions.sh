@@ -2,7 +2,7 @@
 
 function main {
   # set installer behavior
-  parse_args $@;
+  parse_args "$@";
 
   # set installer type
   if [[ ${minimal} == 1 ]]; then
@@ -94,15 +94,16 @@ function debug {
 }
 
 function parse_args {
+  local args;
   if [[ "$#" -eq 0 ]]; then
     # older version of main install.sh file stored args in a variable
-    local args="${run_args[@]}"
+    args=( ${run_args[@]} );
   else
     # newer versions of install.sh just pass it as function args
-    local args="${@}"
+    args=( "$@" );
   fi
 
-  for i in ${args[@]}; do
+  for i in "${args[@]}"; do
     case ${i} in
       "-d") # debug mode
         debug=1;;

@@ -131,7 +131,7 @@ while getopts 'udc:p:' opt; do
 done;
 
 if [[ ! ${product} == '' ]]; then
-  if [[ ! " ${supported_products[@]} " =~ " ${product} " ]]; then
+  if [[ ! " ${supported_products[*]} " =~ " ${product} " ]]; then
     echo "ERROR: product '${product}' not supported";
     exit 1;
   fi;

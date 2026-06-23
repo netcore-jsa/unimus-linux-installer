@@ -18,4 +18,4 @@ debug=0;
 minimal=0;
 
 # run install script
-main $@;
+main "$@";
