@@ -8,7 +8,7 @@ cd "$(dirname "$0")";
 supported_options=( 'test' 'prod' 'Quit' );
 selected_profile='';
 
-if [[ " ${supported_options[*]} " =~ " ${1} " ]]; then
+if [[ " ${supported_options[*]} " == *" ${1} "* ]]; then
   selected_profile=$1;
 else
   echo 'Select build profile:';

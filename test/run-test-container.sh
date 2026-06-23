@@ -2,7 +2,7 @@
 
 function main {
   # set workdir to the script dir
-  cd "$(dirname "$0")";
+  cd "$(dirname "$0")" || exit 1;
 
   if [[ -z "${image}" ]]; then
     lscpu=$(lscpu);
@@ -131,7 +131,7 @@ while getopts 'udc:p:' opt; do
 done;
 
 if [[ ! ${product} == '' ]]; then
-  if [[ ! " ${supported_products[*]} " =~ " ${product} " ]]; then
+  if [[ ! " ${supported_products[*]} " == *" ${product} "* ]]; then
     echo "ERROR: product '${product}' not supported";
     exit 1;
   fi;

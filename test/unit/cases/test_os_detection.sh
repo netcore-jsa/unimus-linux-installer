@@ -10,7 +10,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)";
 ROOT="$(cd "${DIR}/../../.." && pwd)";
 source "${DIR}/../assert.sh";
 
-cd "${ROOT}/target/unimus";
+cd "${ROOT}/target/unimus" || exit 1;
 source ./functions.sh;
 
 # Intercept only the `cat /etc/*release` read; every other cat (e.g. the

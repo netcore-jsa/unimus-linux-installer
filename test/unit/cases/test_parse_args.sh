@@ -6,7 +6,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)";
 ROOT="$(cd "${DIR}/../../.." && pwd)";
 source "${DIR}/../assert.sh";
 
-cd "${ROOT}/target/unimus";
+cd "${ROOT}/target/unimus" || exit 1;
 source ./functions.sh;
 
 # install.sh sets these defaults before calling main/parse_args

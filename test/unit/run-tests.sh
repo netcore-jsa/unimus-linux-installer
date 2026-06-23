@@ -12,7 +12,7 @@
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)";
 ROOT="$(cd "${DIR}/../.." && pwd)";
-cd "${ROOT}";
+cd "${ROOT}" || exit 1;
 
 total_pass=0;
 total_fail=0;

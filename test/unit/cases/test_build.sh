@@ -6,7 +6,7 @@
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)";
 ROOT="$(cd "${DIR}/../../.." && pwd)";
 source "${DIR}/../assert.sh";
-cd "${ROOT}";
+cd "${ROOT}" || exit 1;
 
 # the runner has already assembled the test profile
 

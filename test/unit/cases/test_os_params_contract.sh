@@ -8,7 +8,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)";
 ROOT="$(cd "${DIR}/../../.." && pwd)";
 source "${DIR}/../assert.sh";
 
-cd "${ROOT}/target/unimus";
+cd "${ROOT}/target/unimus" || exit 1;
 
 # re-source generic before each os-params file to reset the contract vars
 function load_params {

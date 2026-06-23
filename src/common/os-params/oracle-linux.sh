@@ -56,7 +56,8 @@ function pre_dependency_install {
   fi;
 
   echo "Installing '${epel_package}'";
-  local epel_install_command=$(printf "${package_install_command}" "${epel_package}");
+  local epel_install_command;
+  epel_install_command=$(printf "${package_install_command}" "${epel_package}");
   ${epel_install_command} ${package_utility_quiet_suffix};
 }
 

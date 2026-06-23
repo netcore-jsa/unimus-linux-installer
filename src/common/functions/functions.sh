@@ -97,7 +97,7 @@ function parse_args {
   local args;
   if [[ "$#" -eq 0 ]]; then
     # older version of main install.sh file stored args in a variable
-    args=( ${run_args[@]} );
+    read -ra args <<< "${run_args[@]}";
   else
     # newer versions of install.sh just pass it as function args
     args=( "$@" );
@@ -119,7 +119,8 @@ function parse_args {
 
 function check_root {
   # check if root
-  local user=$(whoami);
+  local user;
+  user=$(whoami);
   debug "Running as user '${user}'";
 
   if [[ ${user} != "root" ]]; then
@@ -258,7 +259,8 @@ function install_dependencies {
     if ! ${package_check_installed_command} $i &> /dev/null; then
       echo "Installing dependency package '${i}'";
 
-      local dependency_install_command=$(printf "${package_install_command}" "${i}");
+      local dependency_install_command;
+      dependency_install_command=$(printf "${package_install_command}" "${i}");
       ${dependency_install_command} ${package_utility_quiet_suffix};
 
       if [[ $? != 0 ]]; then
@@ -313,7 +315,8 @@ function install_java {
       # check if package version matches requirements
       debug "'${i}' package available, validating version requirements";
       # the version command contains a pipe, so eval it instead of running its output as a command
-      local version_command=$(printf "${package_show_latest_version_command}" "${i}");
+      local version_command;
+      version_command=$(printf "${package_show_latest_version_command}" "${i}");
       if eval "${version_command}" |& grep -P "${supported_java_regex}" &> /dev/null; then
         debug "'${i}' package accepted for installation";
         java_package_to_install=$i;
@@ -329,7 +332,8 @@ function install_java {
     echo 'This can take a considerable amount of time...';
     echo;
 
-    local java_install_command=$(printf "${package_install_command}" "${java_package_to_install}");
+    local java_install_command;
+    java_install_command=$(printf "${package_install_command}" "${java_package_to_install}");
 
     ${java_install_command} ${package_utility_quiet_suffix};
 

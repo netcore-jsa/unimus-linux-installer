@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # set workdir to the script dir
-cd "$(dirname "$0")";
+cd "$(dirname "$0")" || exit 1;
 
 # import common installer functions
 <source-replace|functions.sh|source-replace>;
