@@ -2,9 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
 
 permissions:
   contents: read
@@ -35,10 +33,15 @@ jobs:
       - name: Run ShellCheck
         run: |
           shellcheck --version >/dev/null 2>&1 || (sudo apt-get update && sudo apt-get install -y shellcheck)
-          # severity=error only: the sourced-file architecture makes
-          # SC2034/SC2154 (unused/unassigned vars) inherent false positives,
-          # and SC1090/SC1091 (can't follow dynamic 'source') are expected.
-          shellcheck --severity=error -e SC1090,SC1091 \
+          # Lint at warning severity. The excluded codes are inherent to this
+          # codebase's design, not bugs:
+          #   SC1090/SC1091 - dynamic 'source <(...)' can't be followed
+          #   SC2034/SC2154 - vars are set and used across separately-sourced
+          #                   files (os-params / *-data.sh), so "unused" /
+          #                   "referenced but not assigned" are false positives
+          #   SC2091/SC2046 - the installer intentionally builds a command
+          #                   string with printf and runs it via $(...)
+          shellcheck --severity=warning -e SC1090,SC1091,SC2034,SC2154,SC2091,SC2046 \
             build.sh \
             test/*.sh \
             test/container-scripts/*.sh \
