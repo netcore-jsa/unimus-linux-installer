@@ -4,7 +4,9 @@
 # or haveged, so override the package lists for it (overrides aws-centos-rhel.sh)
 case $os_release in
   *"Amazon Linux 2023"*)
-    dependency_packages=( 'curl' 'procps' );
+    # AL2023 ships curl-minimal (provides curl); installing the full 'curl'
+    # package conflicts with it, so only pull in procps here
+    dependency_packages=( 'procps' );
     java_package_install_list=( 'java-17-amazon-corretto' 'java-11-amazon-corretto' 'java-1.8.0-amazon-corretto' );
     ;;
 esac;
