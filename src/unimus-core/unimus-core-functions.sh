@@ -68,7 +68,7 @@ function post_install_info {
     echo "You should see the Core online in your Unimus 'Zones' screen soon.";
     echo;
   fi;
-  echo -n "If you need to change Core configuration, you can edit the '${config_file}' file.";
+  echo "If you need to change Core configuration, you can edit the '${config_file}' file.";
   echo "(please don't forget to restart the core service after to apply the change)";
   echo;
 }
