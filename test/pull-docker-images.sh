@@ -64,7 +64,7 @@ function pull_amazon_linux {
 }
 
 function pull_centos {
-  images=( "ciready/centos:stream-10-ci-c" "ciready/centos:stream-9-ci-c" "centos:8" "centos:7" "centos:6.10" "centos:6.6" );
+  images=( "ciready/centos:stream-10-ci-c" "ciready/centos:stream-9-ci-c" "centos:8" "centos:7" "centos:6.10" );
   docker_pull "${images[@]}";
 }
 

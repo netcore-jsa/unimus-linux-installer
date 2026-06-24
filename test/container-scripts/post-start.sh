@@ -47,7 +47,6 @@ case ${IMAGE} in
   *"centos:8"*)     repoint_centos_vault "http://vault.centos.org/8.5.2111";;
   *"centos:7"*)     repoint_centos_vault "http://vault.centos.org/centos/7.9.2009";;
   *"centos:6.10"*)  repoint_centos_vault "http://vault.centos.org/6.10";;
-  *"centos:6.6"*)   repoint_centos_vault "http://vault.centos.org/6.6";;
   *"debian:8"*)     repoint_debian_archive "jessie";;
   *"debian:9"*)     repoint_debian_archive "stretch";;
   *"debian:10"*)    repoint_debian_archive "buster";;
