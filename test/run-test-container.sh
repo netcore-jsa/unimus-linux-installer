@@ -42,7 +42,7 @@ function x64_menu {
 
   options=( "AlmaLinux 10" "AlmaLinux 9" "AlmaLinux 8" "Amazon Linux 2023" "Amazon Linux 2" "Amazon Linux AMI" "CentOS 10 (Stream)" "CentOS 9 (Stream)" "CentOS 8" "CentOS 7" "CentOS 6.10" "CentOS 6.6" \
             "Debian 13 (Trixie)" "Debian 12 (Bookworm)" "Debian 11 (Bullseye)" "Debian 10 (Buster)" "Debian 9 (Stretch)" "Debian 8 (Jessie)" "RHEL 10" "RHEL 9" "RHEL 8" \
-            "RHEL 7" "Rocky Linux 10" "Rocky Linux 9" "Rocky Linux 8.5" "Rocky Linux 8.4" "OL 10" "OL 9" "OL 8" "OL 7" "Ubuntu 26.04" "Ubuntu 24.04" "Ubuntu 22.04" \
+            "RHEL 7" "RHEL 6" "Rocky Linux 10" "Rocky Linux 9" "Rocky Linux 8.5" "Rocky Linux 8.4" "OL 10" "OL 9" "OL 8" "OL 7" "Ubuntu 26.04" "Ubuntu 24.04" "Ubuntu 22.04" \
             "Ubuntu 20.04" "Ubuntu 18.04" "Ubuntu 16.04" "Ubuntu 14.04" "Ubuntu 12.04" "Quit" );
 
   select opt in "${options[@]}"; do
@@ -69,23 +69,24 @@ function x64_menu {
       20) docker_run "redhat/ubi9";;
       21) docker_run "redhat/ubi8";;
       22) docker_run "registry.access.redhat.com/ubi7/ubi";;
-      23) docker_run "rockylinux/rockylinux:10";;
-      24) docker_run "rockylinux:9";;
-      25) docker_run "rockylinux/rockylinux:8.5";;
-      26) docker_run "rockylinux/rockylinux:8.4";;
-      27) docker_run "oraclelinux:10";;
-      28) docker_run "oraclelinux:9";;
-      29) docker_run "oraclelinux:8";;
-      30) docker_run "oraclelinux:7";;
-      31) docker_run "ubuntu:26.04";;
-      32) docker_run "ubuntu:24.04";;
-      33) docker_run "ubuntu:22.04";;
-      34) docker_run "ubuntu:20.04";;
-      35) docker_run "ubuntu:18.04";;
-      36) docker_run "ubuntu:16.04";;
-      37) docker_run "ubuntu:14.04";;
-      38) docker_run "ubuntu:12.04";;
-      39) exit;;
+      23) docker_run "roboxes/rhel6";;
+      24) docker_run "rockylinux/rockylinux:10";;
+      25) docker_run "rockylinux:9";;
+      26) docker_run "rockylinux/rockylinux:8.5";;
+      27) docker_run "rockylinux/rockylinux:8.4";;
+      28) docker_run "oraclelinux:10";;
+      29) docker_run "oraclelinux:9";;
+      30) docker_run "oraclelinux:8";;
+      31) docker_run "oraclelinux:7";;
+      32) docker_run "ubuntu:26.04";;
+      33) docker_run "ubuntu:24.04";;
+      34) docker_run "ubuntu:22.04";;
+      35) docker_run "ubuntu:20.04";;
+      36) docker_run "ubuntu:18.04";;
+      37) docker_run "ubuntu:16.04";;
+      38) docker_run "ubuntu:14.04";;
+      39) docker_run "ubuntu:12.04";;
+      40) exit;;
     esac;
   done;
 }

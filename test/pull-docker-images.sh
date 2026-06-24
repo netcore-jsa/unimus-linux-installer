@@ -74,7 +74,7 @@ function pull_debian {
 }
 
 function pull_rhel {
-  images=( "redhat/ubi10" "redhat/ubi9" "redhat/ubi8" "registry.access.redhat.com/ubi7/ubi" );
+  images=( "redhat/ubi10" "redhat/ubi9" "redhat/ubi8" "registry.access.redhat.com/ubi7/ubi" "roboxes/rhel6" );
   docker_pull "${images[@]}";
 }
 
