@@ -21,6 +21,36 @@ Installers are split between shared code (in the `common` directory), and produc
 The `build.sh` script takes the shared and per-product code and generates complete and runnable bash 
 installer scripts for each of our products.
 
+### Supported distributions
+
+The installers are tested - via the Docker integration suite - on the following
+x86_64 distributions:
+
+| Family        | Versions                                                              |
+|---------------|-----------------------------------------------------------------------|
+| AlmaLinux     | 10, 9, 8                                                              |
+| Amazon Linux  | 2023, 2, AMI (1)                                                     |
+| CentOS        | Stream 10, Stream 9, 8, 7, 6.10                                      |
+| Debian        | 13 (trixie), 12 (bookworm), 11 (bullseye), 10 (buster), 9 (stretch), 8 (jessie) |
+| Oracle Linux  | 10, 9, 8, 7                                                          |
+| RHEL          | 10, 9, 8, 7, 6                                                       |
+| Rocky Linux   | 10, 9, 8.5, 8.4                                                      |
+| Ubuntu        | 26.04, 24.04, 22.04, 20.04, 18.04, 16.04, 14.04, 12.04              |
+
+On ARM hosts, Raspbian (Buster, Stretch, Jessie) is also covered.
+
+**Java:** the installer selects a supported OpenJDK at install time, ranging from
+OpenJDK 8 on older releases up to OpenJDK 21 on the newest (EL10, etc.); on
+Amazon Linux 2023 it uses Amazon Corretto, and on Debian it falls back to the
+Eclipse Adoptium repo where the distro lacks a suitable package.
+
+**End-of-life releases:** distributions whose upstream mirrors have been retired
+(CentOS 6-8, Debian 8-10, Ubuntu 12.04, RHEL 6) are still tested - the test
+harness repoints the container's package sources to the relevant archive/vault
+mirrors. This is test scaffolding only; the installer itself never modifies a
+system's repositories, so installing on such a release requires the machine to
+already have working (archived) repos.
+
 ### Building the installers
 
 How to build runnable installer scripts:
